@@ -40,7 +40,8 @@ public class FlightsTab extends TabBase
 	 * @param flightManager Instance of FlightManager.
 	 * @param reservationManager Instance of ReservationManager
 	 */
-	public FlightsTab(FlightManager flightManager, ReservationManager reservationManager) {
+	public FlightsTab(FlightManager flightManager, ReservationManager reservationManager) 
+	{
 		this.flightManager = flightManager;
 		this.reservationManager = reservationManager;
 		
@@ -196,7 +197,8 @@ public class FlightsTab extends TabBase
 		 * Called when user selects an item in the JList.
 		 */
 		@Override
-		public void valueChanged(ListSelectionEvent e) {
+		public void valueChanged(ListSelectionEvent e) 
+		{
 			
 		}
 		
