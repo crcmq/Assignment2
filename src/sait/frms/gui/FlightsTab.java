@@ -51,6 +51,12 @@ public class FlightsTab extends TabBase
 		
 		JPanel centerPanel = createCenterPanel();
 		panel.add(centerPanel, BorderLayout.CENTER);
+		
+		JPanel eastPanel = createEastPanel();
+		panel.add(eastPanel, BorderLayout.EAST);
+		
+		JPanel southPanel = createSouthPanel();
+		panel.add(southPanel, BorderLayout.SOUTH);
 	}
 	
 	/**
@@ -65,6 +71,96 @@ public class FlightsTab extends TabBase
 		title.setFont(new Font("serif", Font.PLAIN, 29));
 		panel.add(title);
 		
+		return panel;
+	}
+	
+	/**
+	 * Creates the east panel.
+	 * @return JPanel that goes in east
+	 */
+	private JPanel createEastPanel() 
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		
+		JLabel title = new JLabel("Reserve", SwingConstants.CENTER);
+		title.setFont(new Font("serif", Font.PLAIN, 20));
+		panel.add(title, BorderLayout.NORTH);
+		
+		JPanel textPanel = new JPanel();
+		textPanel.setLayout(new GridLayout(7,2));
+		JLabel flight_textPanelLabel = new JLabel("Flight: ");
+		JTextField flightText = new JTextField(10);
+		JLabel airLine_textPanelLabel = new JLabel("Airline: ");
+		JTextField airLineText = new JTextField(10);
+		JLabel day_textPanelLabel = new JLabel("Day: ");
+		JTextField dayText = new JTextField(10);
+		JLabel time_textPanelLabel = new JLabel("Time: ");
+		JTextField timeText = new JTextField(10);
+		JLabel cost_textPanelLabel = new JLabel("Cost: ");
+		JTextField costText = new JTextField(10);
+		JLabel name_textPanelLabel = new JLabel("Name: ");
+		JTextField nameText = new JTextField(10);
+		JLabel citizenship_textPanelLabel = new JLabel("Citizenship: ");
+		JTextField citizenshipText = new JTextField(10);
+		
+		textPanel.add(flight_textPanelLabel);
+		textPanel.add(flightText);
+		textPanel.add(airLine_textPanelLabel);
+		textPanel.add(airLineText);
+		textPanel.add(day_textPanelLabel);
+		textPanel.add(dayText);
+		textPanel.add(time_textPanelLabel);
+		textPanel.add(timeText);
+		textPanel.add(cost_textPanelLabel);
+		textPanel.add(costText);
+		textPanel.add(name_textPanelLabel);
+		textPanel.add(nameText);
+		textPanel.add(citizenship_textPanelLabel);
+		textPanel.add(citizenshipText);
+		
+		panel.add(textPanel, BorderLayout.CENTER);
+		
+		JButton reserve = new JButton ("Reserve");
+		panel.add(reserve, BorderLayout.SOUTH);
+		
+		return panel;
+	}
+	
+	/**
+	 * Creates the south panel
+	 * @return JPanel that goes in south
+	 */
+	private JPanel createSouthPanel() 
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		
+		JLabel title = new JLabel("Flight Finder", SwingConstants.CENTER);
+		title.setFont(new Font("serif", Font.PLAIN, 20));
+		panel.add(title, BorderLayout.NORTH);
+		
+		JPanel textPanel = new JPanel();
+		textPanel.setLayout(new GridLayout(3,2));
+		
+		JLabel from_textLabel = new JLabel("From: ");
+		JComboBox fromBox = new JComboBox();
+		JLabel to_textLabel = new JLabel("To: ");
+		JComboBox toBox = new JComboBox();
+		JLabel day_textLabel = new JLabel("Day: ");
+		JComboBox dayBox = new JComboBox();
+		
+		textPanel.add(from_textLabel);
+		textPanel.add(fromBox);
+		textPanel.add(to_textLabel);
+		textPanel.add(toBox);
+		textPanel.add(day_textLabel);
+		textPanel.add(dayBox);
+		
+		panel.add(textPanel, BorderLayout.CENTER);
+		
+		JButton findFlight = new JButton ("Find Flights");
+		panel.add(findFlight, BorderLayout.SOUTH);
 		return panel;
 	}
 	
