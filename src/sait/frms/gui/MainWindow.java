@@ -69,7 +69,8 @@ public class MainWindow extends JFrame
 	/**
 	 * Creates the Main Window and any components inside it.
 	 */
-	public MainWindow() {
+	public MainWindow() 
+	{
 		this.flightManager = new FlightManager();
 		this.reservationManager = new ReservationManager();
 		
@@ -83,6 +84,8 @@ public class MainWindow extends JFrame
 		
 		centerPanel = createCenterPanel();
 		add(centerPanel, BorderLayout.CENTER);
+		
+		setResizable(false);
 	}
 	
 	/**
@@ -128,7 +131,8 @@ public class MainWindow extends JFrame
 	 * Creates the tab buttons.
 	 * @return JPanel containing tab buttons.
 	 */
-	private JPanel createTabPanel() {
+	private JPanel createTabPanel() 
+	{
 		JPanel tabPanel = new JPanel();
 		
 		tabPanel.setLayout(new GridLayout(1, 2));
