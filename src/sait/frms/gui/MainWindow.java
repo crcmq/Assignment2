@@ -84,6 +84,8 @@ public class MainWindow extends JFrame
 		
 		centerPanel = createCenterPanel();
 		add(centerPanel, BorderLayout.CENTER);
+		
+		setResizable(false);
 	}
 	
 	/**

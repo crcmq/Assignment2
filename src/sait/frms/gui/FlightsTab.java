@@ -152,8 +152,8 @@ public class FlightsTab extends TabBase
 		title.setFont(new Font("serif", Font.PLAIN, 20));
 		panel.add(title, BorderLayout.NORTH);
 		
-		JPanel textPanel = new JPanel();
-		textPanel.setLayout(new GridLayout(3,2));
+		JPanel labelPanel = new JPanel(new GridLayout(3,1));
+		JPanel textPanel = new JPanel(new GridLayout(3,1));	
 		
 		JLabel from_textLabel = new JLabel("From: ");
 		JComboBox fromBox = new JComboBox();
@@ -162,13 +162,14 @@ public class FlightsTab extends TabBase
 		JLabel day_textLabel = new JLabel("Day: ");
 		JComboBox dayBox = new JComboBox();
 		
-		textPanel.add(from_textLabel);
+		labelPanel.add(from_textLabel);
 		textPanel.add(fromBox);
-		textPanel.add(to_textLabel);
+		labelPanel.add(to_textLabel);
 		textPanel.add(toBox);
-		textPanel.add(day_textLabel);
+		labelPanel.add(day_textLabel);
 		textPanel.add(dayBox);
 		
+		panel.add(labelPanel, BorderLayout.WEST);
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton findFlight = new JButton ("Find Flights");

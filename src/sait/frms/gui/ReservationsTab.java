@@ -159,8 +159,8 @@ public class ReservationsTab extends TabBase
 		title.setFont(new Font("serif", Font.PLAIN, 20));
 		panel.add(title, BorderLayout.NORTH);
 		
-		JPanel textPanel = new JPanel();
-		textPanel.setLayout(new GridLayout(3,2));
+		JPanel labelPanel = new JPanel(new GridLayout(3,1));
+		JPanel textPanel = new JPanel(new GridLayout(3,1));		
 		
 		JLabel code_textLabel = new JLabel("Code: ");
 		JTextField code_text = new JTextField();		
@@ -169,13 +169,14 @@ public class ReservationsTab extends TabBase
 		JLabel name_textLabel = new JLabel("Name: ");
 		JTextField name_text = new JTextField();
 		
-		textPanel.add(code_textLabel);
+		labelPanel.add(code_textLabel);
 		textPanel.add(code_text);
-		textPanel.add(airline_textLabel);
+		labelPanel.add(airline_textLabel);
 		textPanel.add(airline_text);
-		textPanel.add(name_textLabel);
+		labelPanel.add(name_textLabel);
 		textPanel.add(name_text);
 		
+		panel.add(labelPanel, BorderLayout.WEST);
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton findFlight = new JButton ("Find Flights");
