@@ -5,6 +5,7 @@ import javax.swing.*;
 
 //import sait.frms.gui.FlightsTab.MyListSelectionListener;
 import sait.frms.manager.ReservationManager;
+import sait.frms.problemdomain.Flight;
 import sait.frms.problemdomain.Reservation;
 
 /**
@@ -20,7 +21,7 @@ public class ReservationsTab extends TabBase
 	
 	private JList<Reservation> reservationsList;
 	
-	
+	private DefaultListModel<Reservation> reservationModel;
 	
 	/**
 	 * Creates the components for reservations tab.
@@ -68,10 +69,11 @@ public class ReservationsTab extends TabBase
 		
 		panel.setLayout(new BorderLayout());
 			
-		reservationsList = new JList<>();
+		reservationModel = new DefaultListModel<>();
+		reservationsList = new JList<>(reservationModel);
 		
 		// User can only select one item at a time.
-		//flightsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		reservationsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		// Wrap JList in JScrollPane so it is scrollable.
 		JScrollPane scrollPane = new JScrollPane(this.reservationsList);		
