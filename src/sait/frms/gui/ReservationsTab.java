@@ -98,16 +98,26 @@ public class ReservationsTab extends TabBase
 		textPanel.setLayout(new GridLayout(7,2));
 		JLabel code_textPanelLabel = new JLabel("Code: ");
 		JTextField codeText = new JTextField(10);
+		codeText.setEditable(false);
+		
 		JLabel flight_textPanelLabel = new JLabel("Flight: ");
 		JTextField flightText = new JTextField(10);
+		flightText.setEditable(false);
+		
 		JLabel airline_textPanelLabel = new JLabel("Airline: ");
-		JTextField airlineText = new JTextField(10);		
+		JTextField airlineText = new JTextField(10);
+		airlineText.setEditable(false);
+		
 		JLabel cost_textPanelLabel = new JLabel("Cost: ");
 		JTextField costText = new JTextField(10);
+		costText.setEditable(false);
+		
 		JLabel name_textPanelLabel = new JLabel("Name: ");
 		JTextField nameText = new JTextField(10);
+		
 		JLabel citizenship_textPanelLabel = new JLabel("Citizenship: ");
 		JTextField citizenshipText = new JTextField(10);
+		
 		JLabel status_textPanelLabel = new JLabel("Status: ");
 		JComboBox statusBox = new JComboBox();
 		

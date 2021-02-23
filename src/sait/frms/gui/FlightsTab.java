@@ -92,16 +92,27 @@ public class FlightsTab extends TabBase
 		textPanel.setLayout(new GridLayout(7,2));
 		JLabel flight_textPanelLabel = new JLabel("Flight: ");
 		JTextField flightText = new JTextField(10);
+		flightText.setEditable(false);
+		
 		JLabel airLine_textPanelLabel = new JLabel("Airline: ");
 		JTextField airLineText = new JTextField(10);
+		airLineText.setEditable(false);
+		
 		JLabel day_textPanelLabel = new JLabel("Day: ");
 		JTextField dayText = new JTextField(10);
+		dayText.setEditable(false);
+		
 		JLabel time_textPanelLabel = new JLabel("Time: ");
 		JTextField timeText = new JTextField(10);
+		timeText.setEditable(false);
+		
 		JLabel cost_textPanelLabel = new JLabel("Cost: ");
 		JTextField costText = new JTextField(10);
+		costText.setEditable(false);
+		
 		JLabel name_textPanelLabel = new JLabel("Name: ");
 		JTextField nameText = new JTextField(10);
+		
 		JLabel citizenship_textPanelLabel = new JLabel("Citizenship: ");
 		JTextField citizenshipText = new JTextField(10);
 		
