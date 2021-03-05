@@ -13,4 +13,40 @@ public class Flight {
 	public Flight() {
 		
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public String getAirline() {
+		return airlineName;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public String getTo() {
+		return to;
+	}
+
+	public String getWeekday() {
+		return weekday;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public int getSeats() {
+		return seats;
+	}
+
+	public double getCostPerSeat() {
+		return costPerSeat;
+	}
+	
+	public String toString() {
+		return "";
+	}
 }
