@@ -47,6 +47,7 @@ public class Flight {
 	}
 	
 	public boolean isDomestic() {
+		//TODO
 		return true;
 	}
 	
