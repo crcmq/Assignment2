@@ -46,6 +46,14 @@ public class Flight {
 		return costPerSeat;
 	}
 	
+	public boolean isDomestic() {
+		return true;
+	}
+	
+	private void parseCode(String code) {
+		
+	}
+	
 	public String toString() {
 		return "";
 	}

@@ -41,6 +41,18 @@ public class Reservation {
 		return active;
 	}
 	
+	public void setName(String _name) {
+		this.name = _name;
+	}
+	
+	public void setCitizenship (String _citizenship) {
+		this.citizenship = _citizenship;
+	}
+	
+	public void setActive (boolean _active) {
+		this.active = _active;
+	}
+	
 	public String toString () {
 		return "";
 	}
