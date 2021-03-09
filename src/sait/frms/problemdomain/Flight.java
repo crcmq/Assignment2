@@ -15,7 +15,7 @@ public class Flight {
 	public Flight() {
 	}
 	
-	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) {
+	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) throws EmptyFlightException {
 		try {
 			parseCode(_code);
 			this.from = _from;
@@ -26,6 +26,9 @@ public class Flight {
 			this.costPerSeat = _cost;
 		}
 		catch (InvalidFlightCodeException e) {		
+		}
+		if (this.code == null) {
+			throw new EmptyFlightException();
 		}
 		
 	}
@@ -121,17 +124,19 @@ public class Flight {
 		}
 		else {
 			this.code = code;
+			
+			// read airline name
+			String airlineCode = code.substring(0,2);
+			String airlineName = "";
+			switch (airlineCode) {
+				case "OA": airlineName = "Otto Airlines"; break;
+				case "CA": airlineName = "Conned Air"; break;
+				case "TB": airlineName = "Try a Bus Airways"; break;
+				case "VA": airlineName = "Vertical Airways"; break;
+			}
+			this.airlineName = airlineName;	
 		}
-		// read airline name
-		String airlineCode = code.substring(0,2);
-		String airlineName = "";
-		switch (airlineCode) {
-			case "OA": airlineName = "Otto Airlines"; break;
-			case "CA": airlineName = "Conned Air"; break;
-			case "TB": airlineName = "Try a Bus Airways"; break;
-			case "VA": airlineName = "Vertical Airways"; break;
-		}
-		this.airlineName = airlineName;	
+		
 	}
 	
 	public String toString() {
