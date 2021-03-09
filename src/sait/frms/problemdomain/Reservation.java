@@ -10,7 +10,16 @@ public class Reservation {
 	private boolean active;
 	
 	public Reservation() {
-		//TODO
+	}
+	
+	public Reservation (String _code, String _flightCode, String _airline, String _name, String _citizenship, double _cost, boolean _active) {
+		this.code = _code;
+		this.flightCode = _flightCode;
+		this.airline = _airline;
+		this.name = _name;
+		this.citizenship = _citizenship;
+		this.cost = _cost;
+		this.active = _active;
 	}
 
 	public String getCode() {
@@ -54,7 +63,8 @@ public class Reservation {
 	}
 	
 	public String toString () {
-		//TODO
-		return "";
+		String s = String.format("%5s, Flight: %7s, Airline: %-20s, Name: %-30s, Citizenship: %-15s, Cost: %5.2f Active: %b", 
+								this.code, this.flightCode, this.airline, this.name, this.citizenship, this.cost, this.active);
+		return s;
 	}
 }

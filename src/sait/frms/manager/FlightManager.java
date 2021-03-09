@@ -3,14 +3,14 @@ import sait.frms.problemdomain.*;
 import java.util.*;
 
 public class FlightManager {
-	public final String WEEKDAY_ANY = "Any";
-	public final String WEEKDAY_SUNDAY = "Sunday";
-	public final String WEEKDAY_MONDAY = "Monday";
-	public final String WEEKDAY_TUESDAY = "Tuesday";
-	public final String WEEKDAY_WEDNESDAY = "Wednesday";
-	public final String WEEKDAY_THURSDAY = "Thursday";
-	public final String WEEKDAY_FRIDAY = "Friday";
-	public final String WEEKDAY_SATURDAY = "Saturday";
+	public static final String WEEKDAY_ANY = "Any";
+	public static final String WEEKDAY_SUNDAY = "Sunday";
+	public static final String WEEKDAY_MONDAY = "Monday";
+	public static final String WEEKDAY_TUESDAY = "Tuesday";
+	public static final String WEEKDAY_WEDNESDAY = "Wednesday";
+	public static final String WEEKDAY_THURSDAY = "Thursday";
+	public static final String WEEKDAY_FRIDAY = "Friday";
+	public static final String WEEKDAY_SATURDAY = "Saturday";
 	
 	private ArrayList<Flight> flights;
 	private ArrayList<String> airports;
