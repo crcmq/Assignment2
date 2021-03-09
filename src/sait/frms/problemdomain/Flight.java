@@ -18,16 +18,15 @@ public class Flight {
 	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) {
 		try {
 			parseCode(_code);
+			this.from = _from;
+			this.to = _to;
+			this.weekday = _day;
+			this.time = _time;
+			this.seats = _seats;
+			this.costPerSeat = _cost;
 		}
 		catch (InvalidFlightCodeException e) {		
 		}
-		
-		this.from = _from;
-		this.to = _to;
-		this.weekday = _day;
-		this.time = _time;
-		this.seats = _seats;
-		this.costPerSeat = _cost;
 		
 	}
 
@@ -92,6 +91,8 @@ public class Flight {
 	
 	public String toString() {
 		//TODO
-		return "";
+		String s = String.format("%7s, From: %3s, To: %3s, Day: %9s, Cost: %4.2f", 
+								this.code, this.from, this.to, this.weekday, this.costPerSeat);
+		return s;
 	}
 }
