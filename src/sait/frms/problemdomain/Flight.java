@@ -29,35 +29,66 @@ public class Flight {
 		}
 		
 	}
-
+	/**
+	 * Get flight code
+	 * @return code
+	 */
 	public String getCode() {
 		return code;
 	}
 
+	/**
+	 * Get Flight airline Name
+	 * @return airlineName
+	 */
 	public String getAirline() {
 		return airlineName;
 	}
 
+	/**
+	 * Get From location of flight
+	 * @return from
+	 */
 	public String getFrom() {
 		return from;
 	}
 
+	/**
+	 * Get To loaction of flight
+	 * @return to
+	 */
 	public String getTo() {
 		return to;
 	}
 
+	/**
+	 * Get weekday of flight
+	 * @return weekday
+	 */
 	public String getWeekday() {
 		return weekday;
 	}
 
+	/**
+	 * Get time of flight
+	 * @return time
+	 */
 	public String getTime() {
 		return time;
 	}
 
+	/**
+	 * Get the number of seats flight
+	 * @return seats
+	 */
 	public int getSeats() {
 		return seats;
 	}
 
+	/**
+	 * Get the cost per seat
+	 * @return costPerSeat
+	 */
 	public double getCostPerSeat() {
 		return costPerSeat;
 	}
@@ -82,17 +113,31 @@ public class Flight {
 	 */
 	private void parseCode(String code) throws InvalidFlightCodeException {
 		
+		// check flight code format first
 		String pattern = "([A-Z][A-Z]-)\\d{4}";
 		boolean valid = code.matches(pattern);
 		if (!valid) {
 			throw new InvalidFlightCodeException ("Invalid flight code");
 		}
+		else {
+			this.code = code;
+		}
+		// read airline name
+		String airlineCode = code.substring(0,2);
+		String airlineName = "";
+		switch (airlineCode) {
+			case "OA": airlineName = "Otto Airlines"; break;
+			case "CA": airlineName = "Conned Air"; break;
+			case "TB": airlineName = "Try a Bus Airways"; break;
+			case "VA": airlineName = "Vertical Airways"; break;
+		}
+		this.airlineName = airlineName;	
 	}
 	
 	public String toString() {
-		//TODO
-		String s = String.format("%7s, From: %3s, To: %3s, Day: %9s, Cost: %4.2f", 
-								this.code, this.from, this.to, this.weekday, this.costPerSeat);
+		
+		String s = String.format("%7s, From: %3s, To: %3s, Day: %-9s, Time: %5s, Cost: %4.2f", 
+								this.code, this.from, this.to, this.weekday, this.time, this.costPerSeat);
 		return s;
 	}
 }

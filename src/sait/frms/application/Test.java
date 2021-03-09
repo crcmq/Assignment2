@@ -8,9 +8,14 @@ import sait.frms.problemdomain.*;
 public class Test {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Flight f = new Flight("C1-1234", "YYC", "YVR", "Monday", "17:00", 200, 100);
+		
+		Flight f = new Flight("CA-1234", "YYC", "YVR", "Monday", "17:00", 200, 100);
 		System.out.println(f.toString());
+		System.out.println(f.getAirline());
+		System.out.println(f.isDomestic());
+		
+		Reservation r = new Reservation("D1234", "CA-1234", "CONN AIR", "Roger", "Canada", 100, true);
+		System.out.println(r.toString());
 	}
 
 }
