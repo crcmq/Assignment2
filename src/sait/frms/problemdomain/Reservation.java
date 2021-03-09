@@ -10,7 +10,7 @@ public class Reservation {
 	private boolean active;
 	
 	public Reservation() {
-		
+		//TODO
 	}
 
 	public String getCode() {
@@ -54,6 +54,7 @@ public class Reservation {
 	}
 	
 	public String toString () {
+		//TODO
 		return "";
 	}
 }

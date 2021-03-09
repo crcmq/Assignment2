@@ -11,7 +11,7 @@ public class Flight {
 	private double costPerSeat;
 	
 	public Flight() {
-		
+		//TODO
 	}
 
 	public String getCode() {
@@ -51,10 +51,11 @@ public class Flight {
 	}
 	
 	private void parseCode(String code) {
-		
+		//TODO
 	}
 	
 	public String toString() {
+		//TODO
 		return "";
 	}
 }
