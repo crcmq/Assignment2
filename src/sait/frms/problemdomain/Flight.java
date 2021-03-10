@@ -25,12 +25,10 @@ public class Flight {
 			this.seats = _seats;
 			this.costPerSeat = _cost;
 		}
-		catch (InvalidFlightCodeException e) {		
-		}
-		if (this.code == null) {
+		catch (InvalidFlightCodeException e) {	
+			// if the flightcode is invalid, the flight object should be null
 			throw new EmptyFlightException();
 		}
-		
 	}
 	/**
 	 * Get flight code
