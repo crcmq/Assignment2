@@ -1,7 +1,7 @@
 package sait.frms.exception;
 
 /**
- * If cannot find flight according to the given code, throw this exception
+ * If cannot find flight according to the given information, throw this exception
  * @author Mengqiu (Roger) Chen
  *
  */
