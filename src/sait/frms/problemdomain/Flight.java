@@ -85,6 +85,14 @@ public class Flight {
 	public int getSeats() {
 		return seats;
 	}
+	
+	/**
+	 * Set the available seats of a flight
+	 * @param _seat
+	 */
+	public void setSeats(int _seat) {
+		this.seats = _seat;
+	}
 
 	/**
 	 * Get the cost per seat
