@@ -109,9 +109,8 @@ public class Flight {
 	public boolean isDomestic() {
 		
 		boolean isDomestic = false;
-		String[] domesticAirport = {"YYC", "YEG", "YUL", "YOW", "YYZ", "YVR", "YWG"};
-		isDomestic = Arrays.asList(domesticAirport).contains(this.from) && 
-				Arrays.asList(domesticAirport).contains(this.to);
+		// check the first character of from and to location. if both are 'Y', the flight is domestic
+		isDomestic = this.from.charAt(0) == 'Y' && this.to.charAt(0) == 'Y';
 		return isDomestic;
 	}
 	
