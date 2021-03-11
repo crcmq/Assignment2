@@ -6,11 +6,16 @@ package sait.frms.exception;
  *
  */
 public class AirportDoesNotExist extends Exception{
+	private String message = "Airport does not exist";
 	public AirportDoesNotExist() {
 		
 	}
 	
-	public AirportDoesNotExist(String message) {
-		super (message);
+	public AirportDoesNotExist(String _message) {
+		super(_message);
+	}
+	
+	public String toString() {
+		return this.message;
 	}
 }

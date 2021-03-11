@@ -6,10 +6,15 @@ package sait.frms.exception;
  *
  */
 public class EmptyFlightException extends Exception{
+	private String message = "The flight is invalid";
 	public EmptyFlightException() {	
 	}
 	
-	public EmptyFlightException(String message) {
-		super(message);
+	public EmptyFlightException(String _message) {
+		super(_message);
+	}
+	
+	public String toString() {
+		return this.message;
 	}
 }

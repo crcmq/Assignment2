@@ -6,9 +6,14 @@ package sait.frms.exception;
  *
  */
 public class InvalidReservationCodeException extends Exception{
+	private String message = "Invalid Reservation Code";
 	public InvalidReservationCodeException () {
 	}
 	public InvalidReservationCodeException (String message) {
 		super(message);
+	}
+	
+	public String toString () {
+		return this.message;
 	}
 }

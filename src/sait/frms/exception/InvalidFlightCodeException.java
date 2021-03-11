@@ -6,10 +6,15 @@ package sait.frms.exception;
  *
  */
 public class InvalidFlightCodeException extends Exception{
+	private String message = "Invalid flight code";
 	public InvalidFlightCodeException() {
 	}
 	
 	public InvalidFlightCodeException(String message) {
 		super(message);
+	}
+	
+	public String toString() {
+		return this.message;
 	}
 }
