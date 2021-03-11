@@ -19,7 +19,6 @@ public class FlightManager {
 	private ArrayList<String> airportNames;
 	
 	public FlightManager() {
-		//TODO
 	}
 	
 	public ArrayList<String> getAirports() {
@@ -79,7 +78,6 @@ public class FlightManager {
 	 * @return flights List of flights matching condition
 	 */
 	public ArrayList<Flight> findFlights(String from, String to, String weekday) {
-		//TODO
 		ArrayList<Flight> flights = new ArrayList<>();
 		for (int i = 0; i < flights.size(); i ++) {
 			Flight f = flights.get(i);
