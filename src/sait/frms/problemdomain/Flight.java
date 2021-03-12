@@ -85,6 +85,27 @@ public class Flight {
 	public int getSeats() {
 		return seats;
 	}
+	
+	/**
+	 * Book a seat for this flight
+	 * @param _seat
+	 * @throws SeatUnavailable If book a seat from a flight with 0 seat.
+	 */
+	public void bookSeat() throws SeatUnavailable {
+		if (this.seats > 0) {
+			this.seats --;
+		}
+		else {
+			throw new SeatUnavailable();
+		}
+	}
+	
+	/**
+	 * Canceling a booking will increase the number of available seats.
+	 */
+	public void cancelSeat() {
+		this.seats ++;
+	}
 
 	/**
 	 * Get the cost per seat
@@ -101,9 +122,8 @@ public class Flight {
 	public boolean isDomestic() {
 		
 		boolean isDomestic = false;
-		String[] domesticAirport = {"YYC", "YEG", "YUL", "YOW", "YYZ", "YVR", "YWG"};
-		isDomestic = Arrays.asList(domesticAirport).contains(this.from) && 
-				Arrays.asList(domesticAirport).contains(this.to);
+		// check the first character of from and to location. if both are 'Y', the flight is domestic
+		isDomestic = this.from.charAt(0) == 'Y' && this.to.charAt(0) == 'Y';
 		return isDomestic;
 	}
 	
