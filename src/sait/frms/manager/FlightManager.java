@@ -5,20 +5,22 @@ import java.util.*;
 import java.io.*;
 
 public class FlightManager {
-	public static final String WEEKDAY_ANY = "any";
-	public static final String WEEKDAY_SUNDAY = "sunday";
-	public static final String WEEKDAY_MONDAY = "monday";
-	public static final String WEEKDAY_TUESDAY = "tuesday";
-	public static final String WEEKDAY_WEDNESDAY = "wednesday";
-	public static final String WEEKDAY_THURSDAY = "thursday";
-	public static final String WEEKDAY_FRIDAY = "friday";
-	public static final String WEEKDAY_SATURDAY = "saturday";
+	public static final String WEEKDAY_ANY = "Any";
+	public static final String WEEKDAY_SUNDAY = "Sunday";
+	public static final String WEEKDAY_MONDAY = "Monday";
+	public static final String WEEKDAY_TUESDAY = "Tuesday";
+	public static final String WEEKDAY_WEDNESDAY = "Wednesday";
+	public static final String WEEKDAY_THURSDAY = "Thursday";
+	public static final String WEEKDAY_FRIDAY = "Friday";
+	public static final String WEEKDAY_SATURDAY = "Saturday";
 	
 	private ArrayList<Flight> flights;
 	private ArrayList<String> airports;
 	private ArrayList<String> airportNames;
 	
 	public FlightManager() {
+		populateFlights();
+		populateAirports();
 	}
 	
 	public ArrayList<String> getAirports() {
