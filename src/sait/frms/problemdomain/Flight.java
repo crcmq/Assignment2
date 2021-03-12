@@ -87,11 +87,24 @@ public class Flight {
 	}
 	
 	/**
-	 * Set the available seats of a flight
+	 * Book a seat for this flight
 	 * @param _seat
+	 * @throws SeatUnavailable If book a seat from a flight with 0 seat.
 	 */
-	public void setSeats(int _seat) {
-		this.seats = _seat;
+	public void bookSeat() throws SeatUnavailable {
+		if (this.seats > 0) {
+			this.seats --;
+		}
+		else {
+			throw new SeatUnavailable();
+		}
+	}
+	
+	/**
+	 * Canceling a booking will increase the number of available seats.
+	 */
+	public void cancelSeat() {
+		this.seats ++;
 	}
 
 	/**
