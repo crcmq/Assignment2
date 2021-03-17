@@ -14,9 +14,9 @@ public class FlightManager {
 	public static final String WEEKDAY_FRIDAY = "Friday";
 	public static final String WEEKDAY_SATURDAY = "Saturday";
 	
-	private ArrayList<Flight> flights;
-	private ArrayList<String> airports;
-	private ArrayList<String> airportNames;
+	private ArrayList<Flight> flights = new ArrayList<>();
+	private ArrayList<String> airports = new ArrayList<>();
+	private ArrayList<String> airportNames = new ArrayList<>();
 	
 	public FlightManager() {
 		populateFlights();
