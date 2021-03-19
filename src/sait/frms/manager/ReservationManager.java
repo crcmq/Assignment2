@@ -28,9 +28,14 @@ public class ReservationManager {
 		//TODO
 	}
 	
+	/**
+	 * Get available seats for each flight	
+	 * @param flight
+	 * @return the number of available seats
+	 */
 	private int getAvailableSeats(Flight flight) {
-		//TODO
-		return 0;
+		int seats = flight.getSeats();
+		return seats;
 	}
 	
 	private String generateReservationCode(Flight flight) {
