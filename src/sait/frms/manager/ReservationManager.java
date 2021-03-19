@@ -38,9 +38,23 @@ public class ReservationManager {
 		return seats;
 	}
 	
+	/**
+	 * Generate random reservation code according to flight
+	 * D is for domestic, I is for international
+	 * @param flight
+	 * @return reservation code of the reservation
+	 */
 	private String generateReservationCode(Flight flight) {
-		//TODO
-		return "";
+		// generate random number from 1000 to 9999
+		String reservationCode = "";
+		int randomCode = (int)(Math.random() * 9000 + 1000);
+		if (flight.isDomestic()) {
+			reservationCode = "D" + randomCode;
+		}
+		else {
+			reservationCode = "I" + randomCode;
+		}
+		return reservationCode;
 	}
 	
 	private void populateFromBinary() {
