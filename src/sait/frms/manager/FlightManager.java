@@ -112,7 +112,7 @@ public class FlightManager {
 				String time = info[4];
 				int seats = Integer.parseInt(info[5]);
 				double cost = Double.parseDouble(info[6]);
-							
+				// invalid flights will be skipped			
 				Flight f = new Flight(flightcode, from, to, day, time, seats, cost);
 				flights.add(f);	
 			}
