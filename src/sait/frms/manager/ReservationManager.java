@@ -27,9 +27,23 @@ public class ReservationManager {
 		return r;
 	}
 	
+	/**
+	 * Search through all the reservations and find out matching record 
+	 * then add them to an arraylist
+	 * @param code 
+	 * @param airline
+	 * @param name
+	 * @return arraylist of found reservations
+	 */
 	public ArrayList<Reservation> findReservation(String code, String airline, String name) {
-		//TODO
-		return null;
+		
+		ArrayList<Reservation> foundReservations = new ArrayList<>();
+		for (Reservation r : reservations) {
+			if (r.getCode().equals(code) && r.getAirline().equals(airline) && r.getName().equals(name)) {
+				foundReservations.add(r);
+			}
+		}
+		return foundReservations;
 	}
 	
 	public Reservation findReservationByCode(String code) {
