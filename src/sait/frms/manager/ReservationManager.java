@@ -1,12 +1,14 @@
 package sait.frms.manager;
 import sait.frms.problemdomain.*;
+
+import java.io.*;
 import java.util.*;
 
 public class ReservationManager {
 	private ArrayList<Reservation> reservations = new ArrayList<>();
 	
 	public ReservationManager() {
-		//TODO
+		
 	}
 	
 	/**
@@ -61,8 +63,35 @@ public class ReservationManager {
 		return null;
 	}
 	
-	public void persist() {
+	/**
+	 * Write record from reservations to random access file
+	 * The size of reservation object in random access file is 1 + 10 + 10 + 20 + 50 + 30 + 8 = 129 bytes
+	 * @throws IOException
+	 */
+	public void persist() throws IOException {
 		//TODO
+		RandomAccessFile raf = new RandomAccessFile("res/reservations.bin", "rw");
+		for (Reservation r : reservations) {
+			raf.writeBoolean(r.isActive()); // 1 byte
+			
+			String reservationCode = String.format("%-8s", r.getCode()); // 10 byte
+			raf.writeUTF(reservationCode);
+			
+			String flightCode = String.format("%-8s", r.getFlightCode()); // 10 byte
+			raf.writeUTF(flightCode);
+			
+			String airline = String.format("%-18s", r.getAirline()); // 20 byte
+			raf.writeUTF(airline);
+			
+			String name = String.format("%-48s", r.getName()); // 50 byte
+			raf.writeUTF(name);
+			
+			String citizenship = String.format("%-28s", r.getCitizenship()); // 30 byte
+			raf.writeUTF(citizenship);
+			
+			raf.writeDouble(r.getCost()); // 8 byte
+		}
+		
 	}
 	
 	/**
