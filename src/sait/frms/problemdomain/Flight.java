@@ -26,7 +26,7 @@ public class Flight {
 			this.costPerSeat = _cost;
 		}
 		catch (InvalidFlightCodeException e) {	
-			// if the flightcode is invalid, the flight object should be empty		
+			// if the flightcode is invalid, the flight object should be null		
 		}
 	}
 	/**
