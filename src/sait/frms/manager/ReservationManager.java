@@ -1,11 +1,14 @@
 package sait.frms.manager;
+import sait.frms.exception.SeatUnavailable;
 import sait.frms.problemdomain.*;
 
 import java.io.*;
 import java.util.*;
 
 public class ReservationManager {
+	
 	private ArrayList<Reservation> reservations = new ArrayList<>();
+	private RandomAccessFile raf;
 	
 	public ReservationManager() {
 		
@@ -13,20 +16,28 @@ public class ReservationManager {
 	
 	/**
 	 * Make a reservation according to the booked flight and user information
+	 * If the flight is unavailable, the reservation won't happen
 	 * @param flight
 	 * @param name
 	 * @param citizenship
 	 * @return reservation object
 	 */
 	public Reservation makeReservation(Flight flight, String name, String citizenship) {
-		
-		String reservationCode = generateReservationCode(flight);
-		String flightCode = flight.getCode();
-		String airline = flight.getAirline();
-		double cost = flight.getCostPerSeat();
-		Reservation r = new Reservation (reservationCode, flightCode, airline, name, citizenship, cost, true);
-		
-		return r;
+		try {
+			flight.bookSeat();
+			String reservationCode = generateReservationCode(flight);
+			String flightCode = flight.getCode();
+			String airline = flight.getAirline();
+			double cost = flight.getCostPerSeat();
+			Reservation r = new Reservation (reservationCode, flightCode, airline, name, citizenship, cost, true);
+			
+			return r;
+		}
+		catch (SeatUnavailable s) {
+			System.out.println("The flight is unavailable!");
+		}
+
+		return null;
 	}
 	
 	/**
@@ -69,8 +80,8 @@ public class ReservationManager {
 	 * @throws IOException
 	 */
 	public void persist() throws IOException {
-		//TODO
-		RandomAccessFile raf = new RandomAccessFile("res/reservations.bin", "rw");
+		
+		raf = new RandomAccessFile("res/reservations.bin", "rw");
 		for (Reservation r : reservations) {
 			raf.writeBoolean(r.isActive()); // 1 byte
 			
@@ -123,7 +134,23 @@ public class ReservationManager {
 		return reservationCode;
 	}
 	
-	private void populateFromBinary() {
-		//TODO
+	/**
+	 * read reservations from binary file
+	 * @throws IOException
+	 */
+	private void populateFromBinary() throws IOException {
+		for (long position = 0; position < raf.length(); position += 129) {
+			raf.seek(position);
+			boolean isActive = raf.readBoolean();
+			String reservationCode = raf.readUTF().trim();
+			String flightCode = raf.readUTF().trim();
+			String airline = raf.readUTF().trim();
+			String name = raf.readUTF().trim();
+			String citizenship = raf.readUTF().trim();
+			double cost = raf.readDouble();
+			
+			Reservation r = new Reservation (reservationCode, flightCode, airline, name, citizenship, cost, isActive);
+			reservations.add(r);
+		}
 	}
 }
