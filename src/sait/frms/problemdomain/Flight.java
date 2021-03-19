@@ -15,7 +15,7 @@ public class Flight {
 	public Flight() {
 	}
 	
-	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) throws EmptyFlightException {
+	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) {
 		try {
 			parseCode(_code);
 			this.from = _from;
@@ -26,8 +26,7 @@ public class Flight {
 			this.costPerSeat = _cost;
 		}
 		catch (InvalidFlightCodeException e) {	
-			// if the flightcode is invalid, the flight object should be empty
-			throw new EmptyFlightException();
+			// if the flightcode is invalid, the flight object should be empty		
 		}
 	}
 	/**
