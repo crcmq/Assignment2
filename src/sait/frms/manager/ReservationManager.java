@@ -3,15 +3,28 @@ import sait.frms.problemdomain.*;
 import java.util.*;
 
 public class ReservationManager {
-	private ArrayList<Reservation> reservations;
+	private ArrayList<Reservation> reservations = new ArrayList<>();
 	
 	public ReservationManager() {
 		//TODO
 	}
 	
+	/**
+	 * Make a reservation according to the booked flight and user information
+	 * @param flight
+	 * @param name
+	 * @param citizenship
+	 * @return reservation object
+	 */
 	public Reservation makeReservation(Flight flight, String name, String citizenship) {
-		//TODO
-		return null;
+		
+		String reservationCode = generateReservationCode(flight);
+		String flightCode = flight.getCode();
+		String airline = flight.getAirline();
+		double cost = flight.getCostPerSeat();
+		Reservation r = new Reservation (reservationCode, flightCode, airline, name, citizenship, cost, true);
+		
+		return r;
 	}
 	
 	public ArrayList<Reservation> findReservation(String code, String airline, String name) {
