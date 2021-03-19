@@ -46,8 +46,18 @@ public class ReservationManager {
 		return foundReservations;
 	}
 	
+	/**
+	 * Search through reservations and find matching reservation according to the given code
+	 * @param code
+	 * @return reservation if found, null if not found
+	 */
 	public Reservation findReservationByCode(String code) {
-		//TODO
+		
+		for (Reservation r : reservations) {
+			if (r.getCode().equals(code)) {
+				return r;
+			}
+		}
 		return null;
 	}
 	
