@@ -14,26 +14,12 @@ import sait.frms.problemdomain.Flight;
  */
 public class FlightsTab extends TabBase 
 {
-	/**
-	 * Instance of flight manager.
-	 */
+
 	private FlightManager flightManager;
-	
-	/**
-	 * Instance of reservation manager.
-	 */
 	private ReservationManager reservationManager;
-	
-	/**
-	 * List of flights.
-	 */
 	private JList<Flight> flightsList;
-	
 	private DefaultListModel<Flight> flightsModel;
 	
-	/**
-	 * Creates the components for flights tab.
-	 */
 	/**
 	 * Creates the components for flights tab.
 	 * 
@@ -188,6 +174,9 @@ public class FlightsTab extends TabBase
 		panel.setLayout(new BorderLayout());
 		
 		flightsModel = new DefaultListModel<>();
+		for (Flight f : flightManager.getFlights()) {
+			flightsModel.addElement(f);
+		}
 		flightsList = new JList<>(flightsModel);
 		
 		// User can only select one item at a time.
