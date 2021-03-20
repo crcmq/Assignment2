@@ -159,8 +159,8 @@ public class Flight {
 	
 	public String toString() {
 		
-		String s = String.format("%s, From: %s, To: %s, Day: %s, Time: %s, Cost: %.2f", 
-								this.code, this.from, this.to, this.weekday, this.time, this.costPerSeat);
+		String s = String.format("%s, From: %s, To: %s, Day: %s, Time: %s, Cost: %.2f, Seats: %d",
+								this.code, this.from, this.to, this.weekday, this.time, this.costPerSeat, this.seats);
 		return s;
 	}
 }
