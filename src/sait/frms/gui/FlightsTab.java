@@ -239,6 +239,8 @@ public class FlightsTab extends TabBase
 	private class findFlightListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
+			// clean previous found flights
+			foundFlights.clear();
 						
 			String from = (String) fromBox.getSelectedItem();
 			String to = (String) toBox.getSelectedItem();
