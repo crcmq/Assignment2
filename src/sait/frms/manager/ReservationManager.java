@@ -10,7 +10,8 @@ public class ReservationManager {
 	private ArrayList<Reservation> reservations = new ArrayList<>();
 	private RandomAccessFile raf;
 	
-	public ReservationManager() {
+	public ReservationManager() throws IOException {
+		populateFromBinary();
 		
 	}
 	
@@ -30,7 +31,7 @@ public class ReservationManager {
 			String airline = flight.getAirline();
 			double cost = flight.getCostPerSeat();
 			Reservation r = new Reservation (reservationCode, flightCode, airline, name, citizenship, cost, true);
-			
+			reservations.add(r);
 			return r;
 		}
 		catch (SeatUnavailable s) {
@@ -139,6 +140,7 @@ public class ReservationManager {
 	 * @throws IOException
 	 */
 	private void populateFromBinary() throws IOException {
+		raf = new RandomAccessFile("res/reservations.bin", "rw");
 		for (long position = 0; position < raf.length(); position += 129) {
 			raf.seek(position);
 			boolean isActive = raf.readBoolean();
