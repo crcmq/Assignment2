@@ -18,7 +18,7 @@ public class FlightManager {
 	private ArrayList<String> airports = new ArrayList<>();
 	private ArrayList<String> airportNames = new ArrayList<>();
 	
-	public FlightManager() {
+	public FlightManager() throws FileNotFoundException {
 		populateFlights();
 		populateAirports();
 	}
@@ -95,34 +95,39 @@ public class FlightManager {
 	
 	/**
 	 * Add flights from csv file
+	 * @throws FileNotFoundException 
 	 * @throws EmptyFlightException 
 	 */
-	private void populateFlights() {
+	private void populateFlights() throws FileNotFoundException {
 		File file = new File ("res\\flights.csv");
-		try {
-			Scanner in = new Scanner(file);
-			// read lines from csv file
-			while (in.hasNextLine()) {
-				String line = in.nextLine();
-				String[] info = line.split(",");
-				String flightcode = info[0];
-				String from = info[1];
-				String to = info[2];
-				String day = info[3];
-				String time = info[4];
-				int seats = Integer.parseInt(info[5]);
-				double cost = Double.parseDouble(info[6]);
-							
+		
+		Scanner in = new Scanner(file);
+		// read lines from csv file
+		while (in.hasNextLine()) {
+			String line = in.nextLine();
+			String[] info = line.split(",");
+			String flightcode = info[0];
+			String from = info[1];
+			String to = info[2];
+			String day = info[3];
+			String time = info[4];
+			int seats = Integer.parseInt(info[5]);
+			double cost = Double.parseDouble(info[6]);
+			// invalid flights will be skipped	
+			try {
 				Flight f = new Flight(flightcode, from, to, day, time, seats, cost);
+			
 				flights.add(f);	
 			}
-			in.close();
+			catch (InvalidFlightCodeException e) {
+				// skip adding this flight
+			}
+
 		}
-		catch (FileNotFoundException e) {
-			System.out.println("flights.csv does not exist");
-		}
-		
+		in.close();
 	}
+		
+	
 	
 	/**
 	 * Add airports to the list
