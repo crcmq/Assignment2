@@ -1,6 +1,10 @@
 package sait.frms.gui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -14,26 +18,23 @@ import sait.frms.problemdomain.Flight;
  */
 public class FlightsTab extends TabBase 
 {
-	/**
-	 * Instance of flight manager.
-	 */
+
 	private FlightManager flightManager;
-	
-	/**
-	 * Instance of reservation manager.
-	 */
 	private ReservationManager reservationManager;
-	
-	/**
-	 * List of flights.
-	 */
 	private JList<Flight> flightsList;
-	
 	private DefaultListModel<Flight> flightsModel;
+	private JTextField flightText;
+	private JTextField airLineText;
+	private JTextField dayText;
+	private JTextField timeText;
+	private JTextField costText;
+	private JTextField nameText;
+	private JTextField citizenshipText;
+	private JComboBox fromBox;
+	private JComboBox toBox;
+	private JComboBox dayBox;
+	private JScrollPane scrollPane;
 	
-	/**
-	 * Creates the components for flights tab.
-	 */
 	/**
 	 * Creates the components for flights tab.
 	 * 
@@ -91,30 +92,30 @@ public class FlightsTab extends TabBase
 		JPanel textPanel = new JPanel();
 		textPanel.setLayout(new GridLayout(7,2));
 		JLabel flight_textPanelLabel = new JLabel("Flight: ");
-		JTextField flightText = new JTextField(10);
+		flightText = new JTextField(10);
 		flightText.setEditable(false);
 		
 		JLabel airLine_textPanelLabel = new JLabel("Airline: ");
-		JTextField airLineText = new JTextField(10);
+		airLineText = new JTextField(10);
 		airLineText.setEditable(false);
 		
 		JLabel day_textPanelLabel = new JLabel("Day: ");
-		JTextField dayText = new JTextField(10);
+		dayText = new JTextField(10);
 		dayText.setEditable(false);
 		
 		JLabel time_textPanelLabel = new JLabel("Time: ");
-		JTextField timeText = new JTextField(10);
+		timeText = new JTextField(10);
 		timeText.setEditable(false);
 		
 		JLabel cost_textPanelLabel = new JLabel("Cost: ");
-		JTextField costText = new JTextField(10);
+		costText = new JTextField(10);
 		costText.setEditable(false);
 		
 		JLabel name_textPanelLabel = new JLabel("Name: ");
-		JTextField nameText = new JTextField(10);
+		nameText = new JTextField(10);
 		
 		JLabel citizenship_textPanelLabel = new JLabel("Citizenship: ");
-		JTextField citizenshipText = new JTextField(10);
+		citizenshipText = new JTextField(10);
 		
 		textPanel.add(flight_textPanelLabel);
 		textPanel.add(flightText);
@@ -153,14 +154,18 @@ public class FlightsTab extends TabBase
 		panel.add(title, BorderLayout.NORTH);
 		
 		JPanel labelPanel = new JPanel(new GridLayout(3,1));
-		JPanel textPanel = new JPanel(new GridLayout(3,1));	
+		JPanel textPanel = new JPanel(new GridLayout(3,1));			
+		
+		String[] dayList = {FlightManager.WEEKDAY_ANY, FlightManager.WEEKDAY_MONDAY, FlightManager.WEEKDAY_TUESDAY, FlightManager.WEEKDAY_WEDNESDAY,
+							FlightManager.WEEKDAY_THURSDAY, FlightManager.WEEKDAY_FRIDAY, FlightManager.WEEKDAY_SATURDAY, FlightManager.WEEKDAY_SUNDAY};
+		
 		
 		JLabel from_textLabel = new JLabel("From: ");
-		JComboBox fromBox = new JComboBox();
+		fromBox = new JComboBox(flightManager.getAirports().toArray());
 		JLabel to_textLabel = new JLabel("To: ");
-		JComboBox toBox = new JComboBox();
+		toBox = new JComboBox(flightManager.getAirports().toArray());
 		JLabel day_textLabel = new JLabel("Day: ");
-		JComboBox dayBox = new JComboBox();
+		dayBox = new JComboBox(dayList);
 		
 		labelPanel.add(from_textLabel);
 		textPanel.add(fromBox);
@@ -173,6 +178,7 @@ public class FlightsTab extends TabBase
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton findFlight = new JButton ("Find Flights");
+		findFlight.addActionListener(new findFlightListener());
 		panel.add(findFlight, BorderLayout.SOUTH);
 		return panel;
 	}
@@ -187,14 +193,14 @@ public class FlightsTab extends TabBase
 		
 		panel.setLayout(new BorderLayout());
 		
-		flightsModel = new DefaultListModel<>();
+		flightsModel = new DefaultListModel<Flight>();
 		flightsList = new JList<>(flightsModel);
 		
 		// User can only select one item at a time.
 		flightsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		// Wrap JList in JScrollPane so it is scrollable.
-		JScrollPane scrollPane = new JScrollPane(this.flightsList);
+		scrollPane = new JScrollPane(flightsList);
 		
 		flightsList.addListSelectionListener(new MyListSelectionListener());
 		
@@ -211,8 +217,48 @@ public class FlightsTab extends TabBase
 		@Override
 		public void valueChanged(ListSelectionEvent e) 
 		{
+			int idx = e.getLastIndex();
+			Flight f = flightManager.getFlights().get(idx);
+			String flightCode = f.getCode();
+			String airline = f.getAirline();
+			String day = f.getWeekday();
+			String time = f.getTime();
+			double cost = f.getCostPerSeat();
 			
-		}
-		
+			flightText.setText(flightCode);
+			airLineText.setText(airline);
+			dayText.setText(day);
+			timeText.setText(time);
+			costText.setText(String.format("%.2f", cost));
+		}	
 	}
+	
+	private class findFlightListener implements ActionListener {
+		@Override
+		public void actionPerformed (ActionEvent e) {
+						
+			String from = (String) fromBox.getSelectedItem();
+			String to = (String) toBox.getSelectedItem();
+			String day = (String) dayBox.getSelectedItem();
+			
+			System.out.println(from);
+			System.out.println(to);
+			System.out.println(day);
+			//JOptionPane.showMessageDialog(null, "test");
+			
+			ArrayList<Flight> foundFlights = flightManager.findFlights(from, to, day);
+
+			// search flight according to the info
+			for (Flight f : foundFlights) {
+				System.out.println(f);
+				flightsModel.addElement(f);
+			}
+			
+			
+
+		
+
+		}
+	}
+	
 }

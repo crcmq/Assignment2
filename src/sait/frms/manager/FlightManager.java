@@ -80,17 +80,19 @@ public class FlightManager {
 	 * @return flights List of flights matching condition
 	 */
 	public ArrayList<Flight> findFlights(String from, String to, String weekday) {
-		ArrayList<Flight> flights = new ArrayList<>();
+		ArrayList<Flight> foundFlights = new ArrayList<>();
 		for (int i = 0; i < flights.size(); i ++) {
 			Flight f = flights.get(i);
 			String flightFrom = f.getFrom();
 			String flightTo = f.getTo();
 			String flightWeekday = f.getWeekday();
-			if (flightFrom.equals(from) && flightTo.equals(to) && flightWeekday.equals(weekday)) {
-				flights.add(f);
+			
+			// from and to must match. If user chose any, flights of any day will be added. Otherwise, weekday must match		
+			if (flightFrom.equals(from) && flightTo.equals(to) && (flightWeekday.equals(weekday) || weekday.equals(WEEKDAY_ANY))) {
+				foundFlights.add(f);
 			}
 		}
-		return flights;
+		return foundFlights;
 	}
 	
 	/**
