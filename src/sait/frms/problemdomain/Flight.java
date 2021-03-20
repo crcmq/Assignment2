@@ -15,7 +15,7 @@ public class Flight {
 	public Flight() {
 	}
 	
-	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) {
+	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) throws InvalidFlightCodeException {
 		try {
 			parseCode(_code);
 			this.from = _from;
@@ -26,7 +26,8 @@ public class Flight {
 			this.costPerSeat = _cost;
 		}
 		catch (InvalidFlightCodeException e) {	
-			// if the flightcode is invalid, the flight object should be null		
+			// if the flightcode is invalid, the flight object should be null
+			throw e;
 		}
 	}
 	/**
@@ -158,7 +159,7 @@ public class Flight {
 	
 	public String toString() {
 		
-		String s = String.format("%7s, From: %3s, To: %3s, Day: %-9s, Time: %5s, Cost: %4.2f", 
+		String s = String.format("%s, From: %s, To: %s, Day: %s, Time: %s, Cost: %.2f", 
 								this.code, this.from, this.to, this.weekday, this.time, this.costPerSeat);
 		return s;
 	}
