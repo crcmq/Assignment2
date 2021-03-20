@@ -86,7 +86,8 @@ public class FlightManager {
 			String flightFrom = f.getFrom();
 			String flightTo = f.getTo();
 			String flightWeekday = f.getWeekday();
-			if (flightFrom.equals(from) && flightTo.equals(to) && flightWeekday.equals(weekday)) {
+			// from and to must match. If user chose any, flights of any day will be added. Otherwise, weekday must match
+			if (flightFrom.equals(from) && flightTo.equals(to) && (flightWeekday.equals(weekday) || weekday.equals(WEEKDAY_ANY))) {
 				flights.add(f);
 			}
 		}
