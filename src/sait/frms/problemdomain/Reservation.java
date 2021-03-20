@@ -63,7 +63,7 @@ public class Reservation {
 	}
 	
 	public String toString () {
-		String s = String.format("%5s, Flight: %7s, Airline: %-20s, Name: %-30s, Citizenship: %-15s, Cost: %5.2f Active: %b", 
+		String s = String.format("%s, Flight: %s, Airline: %s, Name: %s, Citizenship: %s, Cost: %.2f Active: %b", 
 								this.code, this.flightCode, this.airline, this.name, this.citizenship, this.cost, this.active);
 		return s;
 	}
