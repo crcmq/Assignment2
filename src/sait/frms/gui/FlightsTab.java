@@ -3,14 +3,15 @@ package sait.frms.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
-import sait.frms.manager.FlightManager;
-import sait.frms.manager.ReservationManager;
-import sait.frms.problemdomain.Flight;
+import sait.frms.exception.NullCitizenshipException;
+import sait.frms.exception.NullClientNameException;
+import sait.frms.manager.*;
+import sait.frms.problemdomain.*;
 
 /**
  * Holds the components for the flights tab.
@@ -22,7 +23,7 @@ public class FlightsTab extends TabBase
 	private FlightManager flightManager;
 	private ReservationManager reservationManager;
 	private JList<Flight> flightsList;
-	private DefaultListModel<Flight> flightsModel;
+	private DefaultListModel<Flight> flightsModel = new DefaultListModel<Flight>();
 	private JTextField flightText;
 	private JTextField airLineText;
 	private JTextField dayText;
@@ -34,6 +35,7 @@ public class FlightsTab extends TabBase
 	private JComboBox toBox;
 	private JComboBox dayBox;
 	private JScrollPane scrollPane;
+	private ArrayList<Flight> foundFlights;
 	
 	/**
 	 * Creates the components for flights tab.
@@ -135,6 +137,7 @@ public class FlightsTab extends TabBase
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton reserve = new JButton ("Reserve");
+		reserve.addActionListener(new reserveListener());
 		panel.add(reserve, BorderLayout.SOUTH);
 		
 		return panel;
@@ -156,6 +159,7 @@ public class FlightsTab extends TabBase
 		JPanel labelPanel = new JPanel(new GridLayout(3,1));
 		JPanel textPanel = new JPanel(new GridLayout(3,1));			
 		
+		// list of weekdays in combo box
 		String[] dayList = {FlightManager.WEEKDAY_ANY, FlightManager.WEEKDAY_MONDAY, FlightManager.WEEKDAY_TUESDAY, FlightManager.WEEKDAY_WEDNESDAY,
 							FlightManager.WEEKDAY_THURSDAY, FlightManager.WEEKDAY_FRIDAY, FlightManager.WEEKDAY_SATURDAY, FlightManager.WEEKDAY_SUNDAY};
 		
@@ -193,7 +197,7 @@ public class FlightsTab extends TabBase
 		
 		panel.setLayout(new BorderLayout());
 		
-		flightsModel = new DefaultListModel<Flight>();
+		
 		flightsList = new JList<>(flightsModel);
 		
 		// User can only select one item at a time.
@@ -209,6 +213,11 @@ public class FlightsTab extends TabBase
 		return panel;
 	}
 	
+	/**
+	 * 
+	 * Listener for list in scrollpane
+	 *
+	 */
 	private class MyListSelectionListener implements ListSelectionListener 
 	{
 		/**
@@ -217,14 +226,15 @@ public class FlightsTab extends TabBase
 		@Override
 		public void valueChanged(ListSelectionEvent e) 
 		{
-			int idx = e.getLastIndex();
-			Flight f = flightManager.getFlights().get(idx);
+			int idx = e.getFirstIndex();
+			Flight f = foundFlights.get(idx);
 			String flightCode = f.getCode();
 			String airline = f.getAirline();
 			String day = f.getWeekday();
 			String time = f.getTime();
 			double cost = f.getCostPerSeat();
 			
+			// read value from the selected flight in scroll pane
 			flightText.setText(flightCode);
 			airLineText.setText(airline);
 			dayText.setText(day);
@@ -233,32 +243,62 @@ public class FlightsTab extends TabBase
 		}	
 	}
 	
+	/**
+	 * 
+	 * Listener for find flight button
+	 *
+	 */
 	private class findFlightListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-						
+			// clean previous found flights
+			foundFlights = new ArrayList<>();
+										
 			String from = (String) fromBox.getSelectedItem();
 			String to = (String) toBox.getSelectedItem();
 			String day = (String) dayBox.getSelectedItem();
 			
-			System.out.println(from);
-			System.out.println(to);
-			System.out.println(day);
-			//JOptionPane.showMessageDialog(null, "test");
-			
-			ArrayList<Flight> foundFlights = flightManager.findFlights(from, to, day);
+			foundFlights = flightManager.findFlights(from, to, day);
 
-			// search flight according to the info
+			// search flight according to the info and display matched flights in scroll pane
 			for (Flight f : foundFlights) {
-				System.out.println(f);
 				flightsModel.addElement(f);
-			}
-			
-			
-
-		
-
+			}		
 		}
 	}
 	
+	/**
+	 * 
+	 * Listener for Reserve button
+	 *
+	 */
+	private class reserveListener implements ActionListener {
+		@Override
+		public void actionPerformed (ActionEvent e) {
+			String flightCode = flightText.getText();
+			String clientName = nameText.getText();
+			String clientCitizenShip = citizenshipText.getText();
+			
+			Flight foundFlight = flightManager.findFlightByCode(flightCode);
+			try {
+				Reservation r = reservationManager.makeReservation(foundFlight, clientName, clientCitizenShip);
+				String reservationCode = r.getCode();
+				
+				// update the list in scroll pane
+				flightsModel.clear();
+				for (Flight f : foundFlights) {
+					flightsModel.addElement(f);
+				}
+				
+				JOptionPane.showMessageDialog(null, "Your reservation code is: " + reservationCode);
+			}
+			catch (NullClientNameException ce) {
+				JOptionPane.showMessageDialog(null, "Client name cannot be empty");
+			}
+			catch (NullCitizenshipException cite) {
+				JOptionPane.showMessageDialog(null, "Client citizenship cannot be empty");
+			}
+
+		}
+	}
 }

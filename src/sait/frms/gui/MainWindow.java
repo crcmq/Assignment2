@@ -158,7 +158,7 @@ public class MainWindow extends JFrame
 	public void display() 
 	{
 		pack();
-		setSize(700,500);
+		setSize(750,500);
 		setVisible(true);
 	}
 	
