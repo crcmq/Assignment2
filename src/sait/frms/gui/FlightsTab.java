@@ -260,7 +260,7 @@ public class FlightsTab extends TabBase
 			
 			foundFlights = flightManager.findFlights(from, to, day);
 
-			// search flight according to the info and display matched flights in scroll pane
+			// display matched flights in scroll pane
 			for (Flight f : foundFlights) {
 				flightsModel.addElement(f);
 			}		
