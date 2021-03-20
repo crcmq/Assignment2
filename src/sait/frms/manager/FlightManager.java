@@ -57,7 +57,7 @@ public class FlightManager {
 	 * @return result The flight found according to the code
 	 * @throws FlightDoesNotExist
 	 */
-	public Flight findFlightByCode(String code) throws FlightDoesNotExist {
+	public Flight findFlightByCode(String code) {
 		Flight result = new Flight();
 		for (int i = 0; i < flights.size(); i ++) {
 			Flight f = flights.get(i);
@@ -66,9 +66,7 @@ public class FlightManager {
 				result = f;
 			}
 		}
-		if (result.getCode() == null) {
-			throw new FlightDoesNotExist ("Flight is not found");
-		}
+
 		return result;
 	}
 	
