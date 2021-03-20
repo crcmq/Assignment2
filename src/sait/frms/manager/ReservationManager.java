@@ -1,4 +1,6 @@
 package sait.frms.manager;
+import sait.frms.exception.NullCitizenshipException;
+import sait.frms.exception.NullClientNameException;
 import sait.frms.exception.SeatUnavailable;
 import sait.frms.problemdomain.*;
 
@@ -18,12 +20,21 @@ public class ReservationManager {
 	/**
 	 * Make a reservation according to the booked flight and user information
 	 * If the flight is unavailable, the reservation won't happen
+	 * This method will check empty name and citizenship
 	 * @param flight
 	 * @param name
 	 * @param citizenship
 	 * @return reservation object
+	 * @throws NullClientNameException 
+	 * @throws NullCitizenshipException 
 	 */
-	public Reservation makeReservation(Flight flight, String name, String citizenship) {
+	public Reservation makeReservation(Flight flight, String name, String citizenship) throws NullClientNameException, NullCitizenshipException {
+		if (name.equals("")){
+			throw new NullClientNameException();
+		}
+		if (citizenship.equals("")) {
+			throw new NullCitizenshipException();
+		}
 		try {
 			flight.bookSeat();
 			String reservationCode = generateReservationCode(flight);
@@ -32,12 +43,15 @@ public class ReservationManager {
 			double cost = flight.getCostPerSeat();
 			Reservation r = new Reservation (reservationCode, flightCode, airline, name, citizenship, cost, true);
 			reservations.add(r);
+			persist();
 			return r;
 		}
 		catch (SeatUnavailable s) {
 			System.out.println("The flight is unavailable!");
 		}
-
+		catch (IOException e) {
+			
+		}
 		return null;
 	}
 	
