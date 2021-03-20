@@ -3,14 +3,15 @@ package sait.frms.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
-import sait.frms.manager.FlightManager;
-import sait.frms.manager.ReservationManager;
-import sait.frms.problemdomain.Flight;
+import sait.frms.exception.NullCitizenshipException;
+import sait.frms.exception.NullClientNameException;
+import sait.frms.manager.*;
+import sait.frms.problemdomain.*;
 
 /**
  * Holds the components for the flights tab.
@@ -34,6 +35,7 @@ public class FlightsTab extends TabBase
 	private JComboBox toBox;
 	private JComboBox dayBox;
 	private JScrollPane scrollPane;
+	public ArrayList<Flight> foundFlights;
 	
 	/**
 	 * Creates the components for flights tab.
@@ -135,6 +137,7 @@ public class FlightsTab extends TabBase
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton reserve = new JButton ("Reserve");
+		reserve.addActionListener(new reserveListener());
 		panel.add(reserve, BorderLayout.SOUTH);
 		
 		return panel;
@@ -218,7 +221,7 @@ public class FlightsTab extends TabBase
 		public void valueChanged(ListSelectionEvent e) 
 		{
 			int idx = e.getLastIndex();
-			Flight f = flightManager.getFlights().get(idx);
+			Flight f = foundFlights.get(idx);
 			String flightCode = f.getCode();
 			String airline = f.getAirline();
 			String day = f.getWeekday();
@@ -246,7 +249,7 @@ public class FlightsTab extends TabBase
 			System.out.println(day);
 			//JOptionPane.showMessageDialog(null, "test");
 			
-			ArrayList<Flight> foundFlights = flightManager.findFlights(from, to, day);
+			foundFlights = flightManager.findFlights(from, to, day);
 
 			// search flight according to the info
 			for (Flight f : foundFlights) {
@@ -254,11 +257,30 @@ public class FlightsTab extends TabBase
 				flightsModel.addElement(f);
 			}
 			
-			
-
-		
-
 		}
 	}
 	
+	private class reserveListener implements ActionListener {
+		@Override
+		public void actionPerformed (ActionEvent e) {
+			String flightCode = flightText.getText();
+			String clientName = nameText.getText();
+			String clientCitizenShip = citizenshipText.getText();
+			
+			Flight foundFlight = flightManager.findFlightByCode(flightCode);
+			try {
+				Reservation r = reservationManager.makeReservation(foundFlight, clientName, clientCitizenShip);
+				String reservationCode = r.getCode();
+				
+				JOptionPane.showMessageDialog(null, "Your reservation code is: " + reservationCode);
+			}
+			catch (NullClientNameException ce) {
+				JOptionPane.showMessageDialog(null, "Client name cannot be empty");
+			}
+			catch (NullCitizenshipException cite) {
+				JOptionPane.showMessageDialog(null, "Client citizenship cannot be empty");
+			}
+
+		}
+	}
 }
