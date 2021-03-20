@@ -1,9 +1,13 @@
 package sait.frms.gui;
 
 import java.awt.*;
-import javax.swing.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 
-//import sait.frms.gui.FlightsTab.MyListSelectionListener;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import sait.frms.manager.ReservationManager;
 import sait.frms.problemdomain.Flight;
 import sait.frms.problemdomain.Reservation;
@@ -14,14 +18,23 @@ import sait.frms.problemdomain.Reservation;
  */
 public class ReservationsTab extends TabBase 
 {
-	/**
-	 * Instance of reservation manager.
-	 */
+
 	private ReservationManager reservationManager;
-	
 	private JList<Reservation> reservationsList;
+	private DefaultListModel<Reservation> reservationModel = new DefaultListModel<>();
+	private JTextField code_text;
+	private JTextField airline_text;
+	private JTextField name_text;
+	private ArrayList<Reservation> foundReservations;
+	private JScrollPane scrollPane;
+	private JTextField codeText;
+	private JTextField flightText;
+	private JTextField airlineText;
+	private JTextField costText;
+	private JTextField nameText;
+	private JTextField citizenshipText;
+	private JComboBox statusBox;
 	
-	private DefaultListModel<Reservation> reservationModel;
 	
 	/**
 	 * Creates the components for reservations tab.
@@ -67,16 +80,17 @@ public class ReservationsTab extends TabBase
 	{
 		JPanel panel = new JPanel();
 		
-		panel.setLayout(new BorderLayout());
-			
-		reservationModel = new DefaultListModel<>();
+		panel.setLayout(new BorderLayout());		
+		
 		reservationsList = new JList<>(reservationModel);
 		
 		// User can only select one item at a time.
 		reservationsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		// Wrap JList in JScrollPane so it is scrollable.
-		JScrollPane scrollPane = new JScrollPane(this.reservationsList);		
+		scrollPane = new JScrollPane(this.reservationsList);
+		
+		reservationsList.addListSelectionListener(new MyListSelectionListener());
 		
 		panel.add(scrollPane);
 		
@@ -98,30 +112,32 @@ public class ReservationsTab extends TabBase
 		
 		JPanel textPanel = new JPanel();
 		textPanel.setLayout(new GridLayout(7,2));
+		
 		JLabel code_textPanelLabel = new JLabel("Code: ");
-		JTextField codeText = new JTextField(10);
+		codeText = new JTextField(10);
 		codeText.setEditable(false);
 		
 		JLabel flight_textPanelLabel = new JLabel("Flight: ");
-		JTextField flightText = new JTextField(10);
+		flightText = new JTextField(10);
 		flightText.setEditable(false);
 		
 		JLabel airline_textPanelLabel = new JLabel("Airline: ");
-		JTextField airlineText = new JTextField(10);
+		airlineText = new JTextField(10);
 		airlineText.setEditable(false);
 		
 		JLabel cost_textPanelLabel = new JLabel("Cost: ");
-		JTextField costText = new JTextField(10);
+		costText = new JTextField(10);
 		costText.setEditable(false);
 		
 		JLabel name_textPanelLabel = new JLabel("Name: ");
-		JTextField nameText = new JTextField(10);
+		nameText = new JTextField(10);
 		
 		JLabel citizenship_textPanelLabel = new JLabel("Citizenship: ");
-		JTextField citizenshipText = new JTextField(10);
+		citizenshipText = new JTextField(10);
 		
+		String[] activeStatus = {"Active", "Inactive"};
 		JLabel status_textPanelLabel = new JLabel("Status: ");
-		JComboBox statusBox = new JComboBox();
+		statusBox = new JComboBox(activeStatus);
 		
 		textPanel.add(code_textPanelLabel);
 		textPanel.add(codeText);
@@ -163,11 +179,11 @@ public class ReservationsTab extends TabBase
 		JPanel textPanel = new JPanel(new GridLayout(3,1));		
 		
 		JLabel code_textLabel = new JLabel("Code: ");
-		JTextField code_text = new JTextField();		
+		code_text = new JTextField();		
 		JLabel airline_textLabel = new JLabel("Airline: ");
-		JTextField airline_text = new JTextField();
+		airline_text = new JTextField();
 		JLabel name_textLabel = new JLabel("Name: ");
-		JTextField name_text = new JTextField();
+		name_text = new JTextField();
 		
 		labelPanel.add(code_textLabel);
 		textPanel.add(code_text);
@@ -180,9 +196,66 @@ public class ReservationsTab extends TabBase
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton findFlight = new JButton ("Find Flights");
+		findFlight.addActionListener(new findReservationsListener());
 		panel.add(findFlight, BorderLayout.SOUTH);
 		return panel;
 	}
+	
+	private class MyListSelectionListener implements ListSelectionListener 
+	{
+		/**
+		 * Called when user selects an item in the JList.
+		 */
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			int idx = e.getFirstIndex();
+			Reservation r = foundReservations.get(idx);
+			String reservationCode = r.getCode();
+			String flightCode = r.getFlightCode();
+			String airline = r.getAirline();
+			double cost = r.getCost();
+			String clientName = r.getName();
+			String citizenship = r.getCitizenship();
+			boolean isActive = r.isActive();
+			
+			codeText.setText(reservationCode);
+			flightText.setText(flightCode);
+			airlineText.setText(airline);
+			costText.setText(String.format("%.2f",cost));
+			nameText.setText(clientName);
+			citizenshipText.setText(citizenship);
+			
+			if (isActive) {
+				statusBox.setSelectedIndex(0);
+			}
+			else {
+				statusBox.setSelectedIndex(1);
+			}
+			
+		}	
+	}
 
-
+	/**
+	 * 
+	 * Listener for find reservations
+	 *
+	 */
+	private class findReservationsListener implements ActionListener {
+		@Override
+		public void actionPerformed (ActionEvent e) {
+			
+			foundReservations = new ArrayList<>();
+			
+			String reservationCode = code_text.getText();
+			String airline = airline_text.getText();
+			String clientName = name_text.getText();
+			
+			foundReservations = reservationManager.findReservation(reservationCode, airline, clientName);
+						
+			for (Reservation r: foundReservations) {
+				reservationModel.addElement(r);
+			}
+			
+		}
+	}
 }
