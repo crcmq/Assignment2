@@ -23,7 +23,7 @@ public class FlightsTab extends TabBase
 	private FlightManager flightManager;
 	private ReservationManager reservationManager;
 	private JList<Flight> flightsList;
-	private DefaultListModel<Flight> flightsModel = new DefaultListModel<Flight>();
+	private DefaultListModel<Flight> flightsModel;
 	private JTextField flightText;
 	private JTextField airLineText;
 	private JTextField dayText;
@@ -197,6 +197,7 @@ public class FlightsTab extends TabBase
 		
 		panel.setLayout(new BorderLayout());
 		
+		flightsModel = new DefaultListModel<>();
 		
 		flightsList = new JList<>(flightsModel);
 		
@@ -226,8 +227,10 @@ public class FlightsTab extends TabBase
 		@Override
 		public void valueChanged(ListSelectionEvent e) 
 		{
-			int idx = e.getFirstIndex();
-			Flight f = foundFlights.get(idx);
+			int idx = flightsList.getSelectedIndex();
+		
+			Flight f = foundFlights.get(idx);			
+
 			String flightCode = f.getCode();
 			String airline = f.getAirline();
 			String day = f.getWeekday();
