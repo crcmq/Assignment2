@@ -205,7 +205,7 @@ public class FlightsTab extends TabBase
 		flightsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		// Wrap JList in JScrollPane so it is scrollable.
-		scrollPane = new JScrollPane(flightsList);
+		scrollPane = new JScrollPane(this.flightsList);
 		
 		flightsList.addListSelectionListener(new MyListSelectionListener());
 		
@@ -225,10 +225,10 @@ public class FlightsTab extends TabBase
 		 * Called when user selects an item in the JList.
 		 */
 		@Override
-		public void valueChanged(ListSelectionEvent e) 
-		{
-			int idx = flightsList.getSelectedIndex();
+		public void valueChanged(ListSelectionEvent e) {
 		
+			int idx = flightsList.getSelectedIndex();						
+			
 			Flight f = foundFlights.get(idx);			
 
 			String flightCode = f.getCode();
@@ -242,7 +242,7 @@ public class FlightsTab extends TabBase
 			airLineText.setText(airline);
 			dayText.setText(day);
 			timeText.setText(time);
-			costText.setText(String.format("%.2f", cost));
+			costText.setText(String.format("%.2f", cost));	
 		}	
 	}
 	
@@ -254,19 +254,20 @@ public class FlightsTab extends TabBase
 	private class findFlightListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-			// clean previous found flights
+			// clean previous found flights		
 			foundFlights = new ArrayList<>();
+			flightsModel.removeAllElements();
 										
 			String from = (String) fromBox.getSelectedItem();
 			String to = (String) toBox.getSelectedItem();
-			String day = (String) dayBox.getSelectedItem();
+			String day = (String) dayBox.getSelectedItem();	
 			
 			foundFlights = flightManager.findFlights(from, to, day);
 
 			// display matched flights in scroll pane
 			for (Flight f : foundFlights) {
 				flightsModel.addElement(f);
-			}		
+			}						
 		}
 	}
 	
