@@ -5,14 +5,14 @@ package sait.frms.exception;
  * @author Mengqiu (Roger) Chen
  *
  */
-public class SeatUnavailable extends Exception{
+public class SeatUnavailableException extends Exception{
 	private String message = "There is no available seat";
 	
-	public SeatUnavailable() {
+	public SeatUnavailableException() {
 		
 	}
 	
-	public SeatUnavailable(String message) {
+	public SeatUnavailableException(String message) {
 		super(message);
 	}
 }
