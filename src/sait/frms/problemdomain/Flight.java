@@ -89,14 +89,14 @@ public class Flight {
 	/**
 	 * Book a seat for this flight
 	 * @param _seat
-	 * @throws SeatUnavailable If book a seat from a flight with 0 seat.
+	 * @throws SeatUnavailableException If book a seat from a flight with 0 seat.
 	 */
-	public void bookSeat() throws SeatUnavailable {
+	public void bookSeat() throws SeatUnavailableException {
 		if (this.seats > 0) {
 			this.seats --;
 		}
 		else {
-			throw new SeatUnavailable();
+			throw new SeatUnavailableException();
 		}
 	}
 	
