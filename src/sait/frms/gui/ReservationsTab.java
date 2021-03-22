@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import sait.frms.exception.NullCitizenshipException;
+import sait.frms.exception.NullClientNameException;
 import sait.frms.manager.ReservationManager;
 import sait.frms.problemdomain.Flight;
 import sait.frms.problemdomain.Reservation;
@@ -21,7 +23,7 @@ public class ReservationsTab extends TabBase
 
 	private ReservationManager reservationManager;
 	private JList<Reservation> reservationsList;
-	private DefaultListModel<Reservation> reservationModel = new DefaultListModel<>();
+	private DefaultListModel<Reservation> reservationModel;
 	private JTextField code_text;
 	private JTextField airline_text;
 	private JTextField name_text;
@@ -34,6 +36,7 @@ public class ReservationsTab extends TabBase
 	private JTextField nameText;
 	private JTextField citizenshipText;
 	private JComboBox statusBox;
+	private Reservation selectedReservation;  // selected reservation from scroll pane
 	
 	
 	/**
@@ -80,7 +83,9 @@ public class ReservationsTab extends TabBase
 	{
 		JPanel panel = new JPanel();
 		
-		panel.setLayout(new BorderLayout());		
+		panel.setLayout(new BorderLayout());	
+		
+		reservationModel = new DefaultListModel<>();
 		
 		reservationsList = new JList<>(reservationModel);
 		
@@ -157,6 +162,7 @@ public class ReservationsTab extends TabBase
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton update = new JButton ("Update");
+		update.addActionListener(new updateListener());
 		panel.add(update, BorderLayout.SOUTH);
 		
 		return panel;
@@ -208,15 +214,17 @@ public class ReservationsTab extends TabBase
 		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			int idx = e.getFirstIndex();
-			Reservation r = foundReservations.get(idx);
-			String reservationCode = r.getCode();
-			String flightCode = r.getFlightCode();
-			String airline = r.getAirline();
-			double cost = r.getCost();
-			String clientName = r.getName();
-			String citizenship = r.getCitizenship();
-			boolean isActive = r.isActive();
+			
+			int idx = reservationsList.getSelectedIndex();
+			
+			selectedReservation = foundReservations.get(idx);
+			String reservationCode = selectedReservation.getCode();
+			String flightCode = selectedReservation.getFlightCode();
+			String airline = selectedReservation.getAirline();
+			double cost = selectedReservation.getCost();
+			String clientName = selectedReservation.getName();
+			String citizenship = selectedReservation.getCitizenship();
+			boolean isActive = selectedReservation.isActive();
 			
 			codeText.setText(reservationCode);
 			flightText.setText(flightCode);
@@ -243,19 +251,44 @@ public class ReservationsTab extends TabBase
 	private class findReservationsListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-			
+			// clear previously found reservations
 			foundReservations = new ArrayList<>();
+			reservationModel.removeAllElements();
 			
 			String reservationCode = code_text.getText();
 			String airline = airline_text.getText();
 			String clientName = name_text.getText();
-			
+			// search and find reservations
 			foundReservations = reservationManager.findReservation(reservationCode, airline, clientName);
 						
 			for (Reservation r: foundReservations) {
 				reservationModel.addElement(r);
+			}			
+		}
+	}
+	
+	private class updateListener implements ActionListener {
+		@Override
+		public void actionPerformed (ActionEvent e) {
+			String clientName = nameText.getText();
+			String citizenShip = citizenshipText.getText();
+			int status = statusBox.getSelectedIndex();
+			
+			boolean isActive = false;
+			if (status == 0) {
+				isActive = true;
 			}
 			
+			try {
+				reservationManager.updateReservation(selectedReservation, clientName, citizenShip, isActive);
+				
+			}
+			catch (NullClientNameException nce) {
+				JOptionPane.showMessageDialog(null, "Client name cannot be empty");
+			}
+			catch (NullCitizenshipException cite) {
+				JOptionPane.showMessageDialog(null, "Citizenship cannot be empty");
+			}
 		}
 	}
 }
