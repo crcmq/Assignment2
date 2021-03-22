@@ -1,7 +1,7 @@
 package sait.frms.manager;
 import sait.frms.exception.NullCitizenshipException;
 import sait.frms.exception.NullClientNameException;
-import sait.frms.exception.SeatUnavailable;
+import sait.frms.exception.SeatUnavailableException;
 import sait.frms.problemdomain.*;
 
 import java.io.*;
@@ -46,13 +46,35 @@ public class ReservationManager {
 			persist();
 			return r;
 		}
-		catch (SeatUnavailable s) {
+		catch (SeatUnavailableException s) {
 			System.out.println("The flight is unavailable!");
 		}
 		catch (IOException e) {
 			
 		}
 		return null;
+	}
+	
+	public void updateReservation (Reservation r, String _name, String _citizenship, boolean status) throws NullClientNameException, NullCitizenshipException {
+		if (_name.equals("")){
+			throw new NullClientNameException();
+		}
+		if (_citizenship.equals("")) {
+			throw new NullCitizenshipException();
+		}
+
+		try {
+					
+			r.setActive(status);
+			r.setName(_name);
+			r.setCitizenship(_citizenship);
+			
+			persist();
+			
+		}
+		catch (IOException e) {
+			
+		}
 	}
 	
 	/**
@@ -63,10 +85,19 @@ public class ReservationManager {
 	 * @param name Client name
 	 * @return arraylist of found reservations
 	 */
-	public ArrayList<Reservation> findReservation(String code, String airline, String name) {
+	public ArrayList<Reservation> findReservation(String _code, String _airline, String _name) {
 		ArrayList<Reservation> foundReservations = new ArrayList<>();
 		for (Reservation r : reservations) {
-			if (r.getCode().equals(code) && r.getAirline().equals(airline) && r.getName().equals(name)) {
+			String code = r.getCode();
+			String airline = r.getAirline();
+			String name = r.getName();
+			boolean matched = false;
+			// the reservation should match all the conditions that are not empty
+			matched = _code.equals("") || _code.equals(code);
+			matched = matched && (_airline.equals("") || _airline.equals(airline));
+			matched = matched && (_name.equals("") || _name.equals(name));
+					
+			if (matched) {
 				foundReservations.add(r);
 			}
 		}
