@@ -228,21 +228,23 @@ public class FlightsTab extends TabBase
 		public void valueChanged(ListSelectionEvent e) {
 		
 			int idx = flightsList.getSelectedIndex();						
-			
-			Flight f = foundFlights.get(idx);			
+			if (idx != -1) {
+				Flight f = foundFlights.get(idx);			
 
-			String flightCode = f.getCode();
-			String airline = f.getAirline();
-			String day = f.getWeekday();
-			String time = f.getTime();
-			double cost = f.getCostPerSeat();
+				String flightCode = f.getCode();
+				String airline = f.getAirline();
+				String day = f.getWeekday();
+				String time = f.getTime();
+				double cost = f.getCostPerSeat();
+				
+				// read value from the selected flight in scroll pane
+				flightText.setText(flightCode);
+				airLineText.setText(airline);
+				dayText.setText(day);
+				timeText.setText(time);
+				costText.setText(String.format("%.2f", cost));	
+			}
 			
-			// read value from the selected flight in scroll pane
-			flightText.setText(flightCode);
-			airLineText.setText(airline);
-			dayText.setText(day);
-			timeText.setText(time);
-			costText.setText(String.format("%.2f", cost));	
 		}	
 	}
 	
