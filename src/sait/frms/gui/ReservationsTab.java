@@ -216,29 +216,31 @@ public class ReservationsTab extends TabBase
 		public void valueChanged(ListSelectionEvent e) {
 			
 			int idx = reservationsList.getSelectedIndex();
-			
-			selectedReservation = foundReservations.get(idx);
-			String reservationCode = selectedReservation.getCode();
-			String flightCode = selectedReservation.getFlightCode();
-			String airline = selectedReservation.getAirline();
-			double cost = selectedReservation.getCost();
-			String clientName = selectedReservation.getName();
-			String citizenship = selectedReservation.getCitizenship();
-			boolean isActive = selectedReservation.isActive();
-			
-			codeText.setText(reservationCode);
-			flightText.setText(flightCode);
-			airlineText.setText(airline);
-			costText.setText(String.format("%.2f",cost));
-			nameText.setText(clientName);
-			citizenshipText.setText(citizenship);
-			
-			if (isActive) {
-				statusBox.setSelectedIndex(0);
+			if (idx != -1) {
+				selectedReservation = foundReservations.get(idx);
+				String reservationCode = selectedReservation.getCode();
+				String flightCode = selectedReservation.getFlightCode();
+				String airline = selectedReservation.getAirline();
+				double cost = selectedReservation.getCost();
+				String clientName = selectedReservation.getName();
+				String citizenship = selectedReservation.getCitizenship();
+				boolean isActive = selectedReservation.isActive();
+				
+				codeText.setText(reservationCode);
+				flightText.setText(flightCode);
+				airlineText.setText(airline);
+				costText.setText(String.format("%.2f",cost));
+				nameText.setText(clientName);
+				citizenshipText.setText(citizenship);
+				
+				if (isActive) {
+					statusBox.setSelectedIndex(0);
+				}
+				else {
+					statusBox.setSelectedIndex(1);
+				}
 			}
-			else {
-				statusBox.setSelectedIndex(1);
-			}
+
 			
 		}	
 	}
@@ -262,7 +264,10 @@ public class ReservationsTab extends TabBase
 			foundReservations = reservationManager.findReservation(reservationCode, airline, clientName);
 						
 			for (Reservation r: foundReservations) {
-				reservationModel.addElement(r);
+				if (r.isActive()) {
+					reservationModel.addElement(r);
+				}
+				
 			}			
 		}
 	}
@@ -272,6 +277,7 @@ public class ReservationsTab extends TabBase
 		public void actionPerformed (ActionEvent e) {
 			String clientName = nameText.getText();
 			String citizenShip = citizenshipText.getText();
+			String code = codeText.getText();
 			int status = statusBox.getSelectedIndex();
 			
 			boolean isActive = false;
@@ -281,7 +287,15 @@ public class ReservationsTab extends TabBase
 			
 			try {
 				reservationManager.updateReservation(selectedReservation, clientName, citizenShip, isActive);
+				reservationModel.clear();
+				for(Reservation r : foundReservations) {
+					if (r.isActive()) {
+						reservationModel.addElement(r);
+					}
+					
+				}
 				
+				JOptionPane.showMessageDialog(null, code + " Has been updated");
 			}
 			catch (NullClientNameException nce) {
 				JOptionPane.showMessageDialog(null, "Client name cannot be empty");
