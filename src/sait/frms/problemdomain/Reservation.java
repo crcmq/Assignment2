@@ -4,8 +4,8 @@ import sait.frms.exception.NullCitizenshipException;
 import sait.frms.exception.NullClientNameException;
 
 /**
- * 
- * @author 845368
+ * Reservation object
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
  *
  */
 public class Reservation {
@@ -20,6 +20,16 @@ public class Reservation {
 	public Reservation() {
 	}
 	
+	/**
+	 * 
+	 * @param _code Reservation code
+	 * @param _flightCode Flight code
+	 * @param _airline Airline name
+	 * @param _name Client name
+	 * @param _citizenship Client citizenship
+	 * @param _cost Cost per seat
+	 * @param _active Status is active ?
+	 */
 	public Reservation (String _code, String _flightCode, String _airline, String _name, String _citizenship, double _cost, boolean _active) {
 		this.code = _code;
 		this.flightCode = _flightCode;
@@ -72,7 +82,7 @@ public class Reservation {
 
 	/**
 	 * 
-	 * @return the cost of the reservation
+	 * @return the cost per seat
 	 */
 	public double getCost() {
 		return cost;
@@ -88,7 +98,7 @@ public class Reservation {
 	
 	/**
 	 * Change client name of reservation
-	 * @param _name
+	 * @param _name Client name
 	 * @throws NullClientNameException Thrown if name is empty
 	 */
 	public void setName(String _name) throws NullClientNameException {
@@ -100,7 +110,7 @@ public class Reservation {
 	
 	/**
 	 * Change client citizenship of reservation
-	 * @param _citizenship
+	 * @param _citizenship Client citizenship
 	 * @throws NullCitizenshipException Thrown if citizenship is empty
 	 */
 	public void setCitizenship (String _citizenship) throws NullCitizenshipException {
@@ -112,12 +122,15 @@ public class Reservation {
 	
 	/**
 	 * Change status of reservation
-	 * @param _active
+	 * @param _active Is the reservation active?
 	 */
 	public void setActive (boolean _active) {
 		this.active = _active;
 	}
 	
+	/**
+	 * Convert reservation to readable form
+	 */
 	public String toString () {
 		String s = String.format("%s, Flight: %s, Airline: %s, Name: %s, Citizenship: %s, Cost: %.2f Active: %b", 
 								this.code, this.flightCode, this.airline, this.name, this.citizenship, this.cost, this.active);
