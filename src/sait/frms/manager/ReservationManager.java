@@ -7,28 +7,39 @@ import sait.frms.problemdomain.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Reservation manager to manage all the reservations from binary file
+ * The data is I/O from "res/reservations.bin"
+ * The database is using logic delete, which means that inactive reservations will be kept in the database
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
+ *
+ */
 public class ReservationManager {
 	
 	private ArrayList<Reservation> reservations = new ArrayList<>();
 	private RandomAccessFile raf;
 	
+	/**
+	 * Constructor loading data from binary file
+	 * @throws IOException
+	 */
 	public ReservationManager() throws IOException {
 		populateFromBinary();
-		
 	}
 	
 	/**
 	 * Make a reservation according to the booked flight and user information
 	 * If the flight is unavailable, the reservation won't happen
 	 * This method will check empty name and citizenship
-	 * @param flight
-	 * @param name
-	 * @param citizenship
+	 * @param flight Flight object
+	 * @param name Client name
+	 * @param citizenship Client citizenship
 	 * @return reservation object
-	 * @throws NullClientNameException 
-	 * @throws NullCitizenshipException 
+	 * @throws NullClientNameException Thrown if client name is empty
+	 * @throws NullCitizenshipException Thrown if client citizenship is empty
+	 * @throws SeatUnavailableException Thrown if no more seat available
 	 */
-	public Reservation makeReservation(Flight flight, String name, String citizenship) throws NullClientNameException, NullCitizenshipException {
+	public Reservation makeReservation(Flight flight, String name, String citizenship) throws NullClientNameException, NullCitizenshipException, SeatUnavailableException {
 		if (name.equals("")){
 			throw new NullClientNameException();
 		}
@@ -47,7 +58,8 @@ public class ReservationManager {
 			return r;
 		}
 		catch (SeatUnavailableException s) {
-			System.out.println("The flight is unavailable!");
+			// The system will do nothing. The reservation will not be made
+			throw s;
 		}
 		catch (IOException e) {
 			
@@ -55,6 +67,15 @@ public class ReservationManager {
 		return null;
 	}
 	
+	/**
+	 * Update reservation according to user input
+	 * @param r Reservation
+	 * @param _name Client name
+	 * @param _citizenship Client citizenship
+	 * @param status Is it active?
+	 * @throws NullClientNameException Thrown if client name is empty
+	 * @throws NullCitizenshipException Thrown if citizenship is empty
+	 */
 	public void updateReservation (Reservation r, String _name, String _citizenship, boolean status) throws NullClientNameException, NullCitizenshipException {
 		if (_name.equals("")){
 			throw new NullClientNameException();
@@ -69,6 +90,7 @@ public class ReservationManager {
 			r.setName(_name);
 			r.setCitizenship(_citizenship);
 			
+			// write data to binary file
 			persist();
 			
 		}
@@ -80,10 +102,10 @@ public class ReservationManager {
 	/**
 	 * Search through all the reservations and find out matching record 
 	 * then add them to an arraylist
-	 * @param code Reservation code
-	 * @param airline Airline name
-	 * @param name Client name
-	 * @return arraylist of found reservations
+	 * @param _code Reservation code
+	 * @param _airline Airline name
+	 * @param _name Client name
+	 * @return foundReservations Arraylist of found reservations
 	 */
 	public ArrayList<Reservation> findReservation(String _code, String _airline, String _name) {
 		ArrayList<Reservation> foundReservations = new ArrayList<>();
@@ -106,7 +128,7 @@ public class ReservationManager {
 	
 	/**
 	 * Search through reservations and find matching reservation according to the given code
-	 * @param code
+	 * @param code Reservation code
 	 * @return reservation if found, null if not found
 	 */
 	public Reservation findReservationByCode(String code) {
@@ -152,7 +174,7 @@ public class ReservationManager {
 	
 	/**
 	 * Get available seats for each flight	
-	 * @param flight
+	 * @param flight Flight object
 	 * @return the number of available seats
 	 */
 	private int getAvailableSeats(Flight flight) {
@@ -163,7 +185,7 @@ public class ReservationManager {
 	/**
 	 * Generate random reservation code according to flight
 	 * D is for domestic, I is for international
-	 * @param flight
+	 * @param flight Flight object
 	 * @return reservation code of the reservation
 	 */
 	private String generateReservationCode(Flight flight) {
