@@ -18,8 +18,7 @@ import sait.frms.manager.ReservationManager;
  * The main window (JFrame).
  * 
  */
-public class MainWindow extends JFrame 
-{
+public class MainWindow extends JFrame {
 	private static final String TAB_FLIGHTS = "flights";
 	private static final String TAB_RESERVATIONS = "reservations";
 	
@@ -72,8 +71,7 @@ public class MainWindow extends JFrame
 	 * Creates the Main Window and any components inside it.
 	 * @throws IOException 
 	 */
-	public MainWindow() throws IOException 
-	{
+	public MainWindow() throws IOException {
 		this.flightManager = new FlightManager();
 		this.reservationManager = new ReservationManager();
 		
@@ -95,8 +93,7 @@ public class MainWindow extends JFrame
 	 * Creates the north panel.
 	 * @return JPanel that goes in north.
 	 */
-	private JPanel createNorthPanel() 
-	{
+	private JPanel createNorthPanel() {
 		JPanel panel = new JPanel();
 		
 		panel.setLayout(new BorderLayout());
@@ -111,8 +108,7 @@ public class MainWindow extends JFrame
 	 * Creates the center panel.
 	 * @return JPanel that goes in center.
 	 */
-	private JPanel createCenterPanel() 
-	{
+	private JPanel createCenterPanel() {
 		JPanel panel = new JPanel();
 		
 		cardLayout = new CardLayout();
@@ -134,8 +130,7 @@ public class MainWindow extends JFrame
 	 * Creates the tab buttons.
 	 * @return JPanel containing tab buttons.
 	 */
-	private JPanel createTabPanel() 
-	{
+	private JPanel createTabPanel() {
 		JPanel tabPanel = new JPanel();
 		
 		tabPanel.setLayout(new GridLayout(1, 2));
@@ -155,8 +150,7 @@ public class MainWindow extends JFrame
 	/**
 	 * Displays the JFrame window.
 	 */
-	public void display() 
-	{
+	public void display() {
 		pack();
 		setSize(800,500);
 		setVisible(true);
@@ -168,8 +162,7 @@ public class MainWindow extends JFrame
 	 * @author Nick Hamnett, Mohamed
 	 * @version January 2, 2020
 	 */
-private class TabButtonActionListener implements ActionListener 
-	{
+private class TabButtonActionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) 
