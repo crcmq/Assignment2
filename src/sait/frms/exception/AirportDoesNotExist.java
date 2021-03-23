@@ -2,7 +2,7 @@ package sait.frms.exception;
 
 /**
  * If an airport code does not exist, throw this exception
- * @author Mengqiu (Roger) Chen
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
  *
  */
 public class AirportDoesNotExist extends Exception{
