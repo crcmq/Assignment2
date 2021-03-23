@@ -2,6 +2,12 @@ package sait.frms.problemdomain;
 import java.util.*;
 
 import sait.frms.exception.*;
+
+/**
+ * Flight object
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
+ *
+ */
 public class Flight {
 	private String code;
 	private String airlineName;
@@ -15,6 +21,17 @@ public class Flight {
 	public Flight() {
 	}
 	
+	/**
+	 * Constructor of flight 
+	 * @param _code flight code
+	 * @param _from from airport
+	 * @param _to to airport
+	 * @param _day weekday
+	 * @param _time flight time
+	 * @param _seats available seats
+	 * @param _cost cost per seat
+	 * @throws InvalidFlightCodeException Thrown if flight code is invalid
+	 */
 	public Flight(String _code, String _from, String _to, String _day, String _time, int _seats, double _cost) throws InvalidFlightCodeException {
 		try {
 			parseCode(_code);
@@ -26,7 +43,7 @@ public class Flight {
 			this.costPerSeat = _cost;
 		}
 		catch (InvalidFlightCodeException e) {	
-			// if the flightcode is invalid, the flight object should be null
+			// if the flightcode is invalid, the flight object should be empty
 			throw e;
 		}
 	}
@@ -88,15 +105,14 @@ public class Flight {
 	
 	/**
 	 * Book a seat for this flight
-	 * @param _seat
-	 * @throws SeatUnavailable If book a seat from a flight with 0 seat.
+	 * @throws SeatUnavailableException If book a seat from a flight with 0 seat.
 	 */
-	public void bookSeat() throws SeatUnavailable {
+	public void bookSeat() throws SeatUnavailableException {
 		if (this.seats > 0) {
 			this.seats --;
 		}
 		else {
-			throw new SeatUnavailable();
+			throw new SeatUnavailableException();
 		}
 	}
 	
@@ -116,7 +132,7 @@ public class Flight {
 	}
 	
 	/**
-	 * Check whether from and to attribute is domestic. Both of them should be domestic if a flight is domestic
+	 * Check if from and to attribute is domestic. Both of them should be domestic if a flight is domestic
 	 * @return isDomestic
 	 */
 	public boolean isDomestic() {
@@ -129,8 +145,8 @@ public class Flight {
 	
 	/**
 	 * Validate flight code. 
-	 * @param code
-	 * @throws InvalidFlightCodeException
+	 * @param code flight code
+	 * @throws InvalidFlightCodeException Thrown if the flight code is invalid
 	 */
 	private void parseCode(String code) throws InvalidFlightCodeException {
 		
@@ -153,10 +169,12 @@ public class Flight {
 				case "VA": airlineName = "Vertical Airways"; break;
 			}
 			this.airlineName = airlineName;	
-		}
-		
+		}	
 	}
 	
+	/**
+	 * Convert flight to readable form
+	 */
 	public String toString() {
 		
 		String s = String.format("%s, From: %s, To: %s, Day: %s, Time: %s, Cost: %.2f, Seats: %d",

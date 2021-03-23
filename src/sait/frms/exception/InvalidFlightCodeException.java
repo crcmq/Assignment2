@@ -1,8 +1,8 @@
 package sait.frms.exception;
 
 /**
- * If flight code is invalid, throw this excception
- * @author Mengqiu (Roger) Chen
+ * If flight code is invalid, throw this exception
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
  *
  */
 public class InvalidFlightCodeException extends Exception{

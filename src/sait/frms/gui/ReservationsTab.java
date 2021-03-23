@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import sait.frms.exception.NullCitizenshipException;
+import sait.frms.exception.NullClientNameException;
 import sait.frms.manager.ReservationManager;
 import sait.frms.problemdomain.Flight;
 import sait.frms.problemdomain.Reservation;
@@ -16,12 +18,11 @@ import sait.frms.problemdomain.Reservation;
  * Holds the components for the reservations tab.
  * 
  */
-public class ReservationsTab extends TabBase 
-{
+public class ReservationsTab extends TabBase {
 
 	private ReservationManager reservationManager;
 	private JList<Reservation> reservationsList;
-	private DefaultListModel<Reservation> reservationModel = new DefaultListModel<>();
+	private DefaultListModel<Reservation> reservationModel;
 	private JTextField code_text;
 	private JTextField airline_text;
 	private JTextField name_text;
@@ -33,14 +34,15 @@ public class ReservationsTab extends TabBase
 	private JTextField costText;
 	private JTextField nameText;
 	private JTextField citizenshipText;
-	private JComboBox statusBox;
+	private JComboBox<String> statusBox;
+	private Reservation selectedReservation;  // selected reservation from scroll pane
 	
 	
 	/**
 	 * Creates the components for reservations tab.
+	 * @param reservationManager ReservationManager object
 	 */
-	public ReservationsTab(ReservationManager reservationManager) 
-	{
+	public ReservationsTab(ReservationManager reservationManager) {
 		this.reservationManager = reservationManager;
 		panel.setLayout(new BorderLayout());
 		
@@ -61,8 +63,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the north panel.
 	 * @return JPanel that goes in north.
 	 */
-	private JPanel createNorthPanel() 
-	{
+	private JPanel createNorthPanel() {
 		JPanel panel = new JPanel();
 		
 		JLabel title = new JLabel("Reservations", SwingConstants.CENTER);
@@ -76,11 +77,12 @@ public class ReservationsTab extends TabBase
 	 * Creates the center panel
 	 * @return JPanel that goes in center.
 	 */
-	private JPanel createCenterPanel() 
-	{
+	private JPanel createCenterPanel() {
 		JPanel panel = new JPanel();
 		
-		panel.setLayout(new BorderLayout());		
+		panel.setLayout(new BorderLayout());	
+		
+		reservationModel = new DefaultListModel<>();
 		
 		reservationsList = new JList<>(reservationModel);
 		
@@ -101,8 +103,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the east panel
 	 * @return JPanel that goes in east
 	 */
-	private JPanel createEastPanel() 
-	{
+	private JPanel createEastPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -137,7 +138,7 @@ public class ReservationsTab extends TabBase
 		
 		String[] activeStatus = {"Active", "Inactive"};
 		JLabel status_textPanelLabel = new JLabel("Status: ");
-		statusBox = new JComboBox(activeStatus);
+		statusBox = new JComboBox<String>(activeStatus);
 		
 		textPanel.add(code_textPanelLabel);
 		textPanel.add(codeText);
@@ -157,6 +158,7 @@ public class ReservationsTab extends TabBase
 		panel.add(textPanel, BorderLayout.CENTER);
 		
 		JButton update = new JButton ("Update");
+		update.addActionListener(new updateListener());
 		panel.add(update, BorderLayout.SOUTH);
 		
 		return panel;
@@ -166,8 +168,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the south panel
 	 * @return JPanel that goes in south
 	 */
-	private JPanel createSouthPanel() 
-	{
+	private JPanel createSouthPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -201,37 +202,39 @@ public class ReservationsTab extends TabBase
 		return panel;
 	}
 	
-	private class MyListSelectionListener implements ListSelectionListener 
-	{
+	private class MyListSelectionListener implements ListSelectionListener {
 		/**
 		 * Called when user selects an item in the JList.
 		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			int idx = e.getFirstIndex();
-			Reservation r = foundReservations.get(idx);
-			String reservationCode = r.getCode();
-			String flightCode = r.getFlightCode();
-			String airline = r.getAirline();
-			double cost = r.getCost();
-			String clientName = r.getName();
-			String citizenship = r.getCitizenship();
-			boolean isActive = r.isActive();
-			
-			codeText.setText(reservationCode);
-			flightText.setText(flightCode);
-			airlineText.setText(airline);
-			costText.setText(String.format("%.2f",cost));
-			nameText.setText(clientName);
-			citizenshipText.setText(citizenship);
-			
-			if (isActive) {
-				statusBox.setSelectedIndex(0);
+			// get index of selected reservation
+			int idx = reservationsList.getSelectedIndex();
+			if (idx != -1) {
+				selectedReservation = foundReservations.get(idx);
+				// read info
+				String reservationCode = selectedReservation.getCode();
+				String flightCode = selectedReservation.getFlightCode();
+				String airline = selectedReservation.getAirline();
+				double cost = selectedReservation.getCost();
+				String clientName = selectedReservation.getName();
+				String citizenship = selectedReservation.getCitizenship();
+				boolean isActive = selectedReservation.isActive();
+				// show info in text fields
+				codeText.setText(reservationCode);
+				flightText.setText(flightCode);
+				airlineText.setText(airline);
+				costText.setText(String.format("%.2f",cost));
+				nameText.setText(clientName);
+				citizenshipText.setText(citizenship);
+				
+				if (isActive) {
+					statusBox.setSelectedIndex(0);
+				}
+				else {
+					statusBox.setSelectedIndex(1);
+				}
 			}
-			else {
-				statusBox.setSelectedIndex(1);
-			}
-			
 		}	
 	}
 
@@ -243,19 +246,59 @@ public class ReservationsTab extends TabBase
 	private class findReservationsListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-			
+			// clear previously found reservations
 			foundReservations = new ArrayList<>();
+			reservationModel.removeAllElements();
 			
+			// read info from user input
 			String reservationCode = code_text.getText();
 			String airline = airline_text.getText();
 			String clientName = name_text.getText();
 			
+			// search and find reservations
 			foundReservations = reservationManager.findReservation(reservationCode, airline, clientName);
-						
+			
+			// display found reservation 
 			for (Reservation r: foundReservations) {
-				reservationModel.addElement(r);
+				if (r.isActive()) {
+					reservationModel.addElement(r);
+				}
+			}			
+		}
+	}
+	
+	private class updateListener implements ActionListener {
+		@Override
+		public void actionPerformed (ActionEvent e) {
+			
+			// read info from user input
+			String clientName = nameText.getText();
+			String citizenShip = citizenshipText.getText();
+			String code = codeText.getText();
+			int status = statusBox.getSelectedIndex();
+			
+			boolean isActive = false;
+			if (status == 0) {
+				isActive = true;
 			}
 			
+			// update reservation according to user input
+			try {
+				reservationManager.updateReservation(selectedReservation, clientName, citizenShip, isActive);
+				reservationModel.clear();
+				for(Reservation r : foundReservations) {
+					if (r.isActive()) {
+						reservationModel.addElement(r);
+					}		
+				}		
+				JOptionPane.showMessageDialog(null, code + " Has been updated");
+			}
+			catch (NullClientNameException nce) {
+				JOptionPane.showMessageDialog(null, "Client name cannot be empty");
+			}
+			catch (NullCitizenshipException cite) {
+				JOptionPane.showMessageDialog(null, "Citizenship cannot be empty");
+			}
 		}
 	}
 }

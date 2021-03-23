@@ -10,15 +10,15 @@ import javax.swing.event.*;
 
 import sait.frms.exception.NullCitizenshipException;
 import sait.frms.exception.NullClientNameException;
+import sait.frms.exception.SeatUnavailableException;
 import sait.frms.manager.*;
 import sait.frms.problemdomain.*;
 
 /**
  * Holds the components for the flights tab.
- * 
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
  */
-public class FlightsTab extends TabBase 
-{
+public class FlightsTab extends TabBase {
 
 	private FlightManager flightManager;
 	private ReservationManager reservationManager;
@@ -31,11 +31,11 @@ public class FlightsTab extends TabBase
 	private JTextField costText;
 	private JTextField nameText;
 	private JTextField citizenshipText;
-	private JComboBox fromBox;
-	private JComboBox toBox;
-	private JComboBox dayBox;
+	private JComboBox<String> fromBox;
+	private JComboBox<String> toBox;
+	private JComboBox<String> dayBox;
 	private JScrollPane scrollPane;
-	private ArrayList<Flight> foundFlights;
+	private ArrayList<Flight> foundFlights; 		 	// This contains all the found flights that match user's condition
 	
 	/**
 	 * Creates the components for flights tab.
@@ -43,8 +43,8 @@ public class FlightsTab extends TabBase
 	 * @param flightManager Instance of FlightManager.
 	 * @param reservationManager Instance of ReservationManager
 	 */
-	public FlightsTab(FlightManager flightManager, ReservationManager reservationManager) 
-	{
+	public FlightsTab(FlightManager flightManager, ReservationManager reservationManager) {
+		
 		this.flightManager = flightManager;
 		this.reservationManager = reservationManager;
 		
@@ -67,8 +67,8 @@ public class FlightsTab extends TabBase
 	 * Creates the north panel.
 	 * @return JPanel that goes in north.
 	 */
-	private JPanel createNorthPanel() 
-	{
+	private JPanel createNorthPanel() {
+		
 		JPanel panel = new JPanel();
 		
 		JLabel title = new JLabel("Flights", SwingConstants.CENTER);
@@ -82,8 +82,8 @@ public class FlightsTab extends TabBase
 	 * Creates the east panel.
 	 * @return JPanel that goes in east
 	 */
-	private JPanel createEastPanel() 
-	{
+	private JPanel createEastPanel() {
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -147,8 +147,8 @@ public class FlightsTab extends TabBase
 	 * Creates the south panel
 	 * @return JPanel that goes in south
 	 */
-	private JPanel createSouthPanel() 
-	{
+	private JPanel createSouthPanel() {
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -165,11 +165,12 @@ public class FlightsTab extends TabBase
 		
 		
 		JLabel from_textLabel = new JLabel("From: ");
-		fromBox = new JComboBox(flightManager.getAirports().toArray());
+		ArrayList<String>airportList = flightManager.getAirports();
+		fromBox = new JComboBox(airportList.toArray()); // this is a String []
 		JLabel to_textLabel = new JLabel("To: ");
-		toBox = new JComboBox(flightManager.getAirports().toArray());
+		toBox = new JComboBox(airportList.toArray()); // this is a String []
 		JLabel day_textLabel = new JLabel("Day: ");
-		dayBox = new JComboBox(dayList);
+		dayBox = new JComboBox<String>(dayList);
 		
 		labelPanel.add(from_textLabel);
 		textPanel.add(fromBox);
@@ -191,8 +192,8 @@ public class FlightsTab extends TabBase
 	 * Creates the center panel.
 	 * @return JPanel that goes in center.
 	 */
-	private JPanel createCenterPanel() 
-	{
+	private JPanel createCenterPanel() {
+		
 		JPanel panel = new JPanel();
 		
 		panel.setLayout(new BorderLayout());
@@ -205,7 +206,7 @@ public class FlightsTab extends TabBase
 		flightsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		// Wrap JList in JScrollPane so it is scrollable.
-		scrollPane = new JScrollPane(flightsList);
+		scrollPane = new JScrollPane(this.flightsList);
 		
 		flightsList.addListSelectionListener(new MyListSelectionListener());
 		
@@ -219,30 +220,31 @@ public class FlightsTab extends TabBase
 	 * Listener for list in scrollpane
 	 *
 	 */
-	private class MyListSelectionListener implements ListSelectionListener 
-	{
+	private class MyListSelectionListener implements ListSelectionListener {
 		/**
 		 * Called when user selects an item in the JList.
 		 */
 		@Override
-		public void valueChanged(ListSelectionEvent e) 
-		{
-			int idx = flightsList.getSelectedIndex();
-		
-			Flight f = foundFlights.get(idx);			
-
-			String flightCode = f.getCode();
-			String airline = f.getAirline();
-			String day = f.getWeekday();
-			String time = f.getTime();
-			double cost = f.getCostPerSeat();
-			
-			// read value from the selected flight in scroll pane
-			flightText.setText(flightCode);
-			airLineText.setText(airline);
-			dayText.setText(day);
-			timeText.setText(time);
-			costText.setText(String.format("%.2f", cost));
+		public void valueChanged(ListSelectionEvent e) {
+			// read index of selected flight
+			int idx = flightsList.getSelectedIndex();						
+			if (idx != -1) {
+				Flight f = foundFlights.get(idx);			
+				
+				// read info
+				String flightCode = f.getCode();
+				String airline = f.getAirline();
+				String day = f.getWeekday();
+				String time = f.getTime();
+				double cost = f.getCostPerSeat();
+				
+				// show the info in text fields
+				flightText.setText(flightCode);
+				airLineText.setText(airline);
+				dayText.setText(day);
+				timeText.setText(time);
+				costText.setText(String.format("%.2f", cost));	
+			}
 		}	
 	}
 	
@@ -254,19 +256,21 @@ public class FlightsTab extends TabBase
 	private class findFlightListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-			// clean previous found flights
+			// clean previous found flights		
 			foundFlights = new ArrayList<>();
-										
+			flightsModel.removeAllElements();
+			
+			// read info from user input
 			String from = (String) fromBox.getSelectedItem();
 			String to = (String) toBox.getSelectedItem();
-			String day = (String) dayBox.getSelectedItem();
+			String day = (String) dayBox.getSelectedItem();	
 			
 			foundFlights = flightManager.findFlights(from, to, day);
 
 			// display matched flights in scroll pane
 			for (Flight f : foundFlights) {
 				flightsModel.addElement(f);
-			}		
+			}						
 		}
 	}
 	
@@ -283,6 +287,8 @@ public class FlightsTab extends TabBase
 			String clientCitizenShip = citizenshipText.getText();
 			
 			Flight foundFlight = flightManager.findFlightByCode(flightCode);
+			
+			// book flight according to user input
 			try {
 				Reservation r = reservationManager.makeReservation(foundFlight, clientName, clientCitizenShip);
 				String reservationCode = r.getCode();
@@ -300,6 +306,9 @@ public class FlightsTab extends TabBase
 			}
 			catch (NullCitizenshipException cite) {
 				JOptionPane.showMessageDialog(null, "Client citizenship cannot be empty");
+			}
+			catch (SeatUnavailableException s) {
+				JOptionPane.showMessageDialog(null, "There's no available seat");
 			}
 
 		}
