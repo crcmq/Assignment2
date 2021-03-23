@@ -1,5 +1,8 @@
-*******The program can be run by using java -jar .\Assignment2.jar within CMD or PowerShell.*********
+Assignment 2
 -----------------------------------------------------------------------------------------------------
+Author: Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
+
+Complete Date: 2021-3-22
 
 This assignment created a flight reservation management system.
 The system can search flight, book flight, and edit the reservations
@@ -22,3 +25,4 @@ The user can also set the status of reservation.
 
 !!!!!INACTIVE RESERVATIONS CANNOT BE SEEN BY CLIENT, BUT THEY ARE STILL IN BINARY FILE.!!!!!
 
+*******The program can be run by using java -jar .\Assignment2.jar within CMD or PowerShell.********
