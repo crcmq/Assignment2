@@ -2,7 +2,7 @@ package sait.frms.exception;
 
 /**
  * If the user did not input any value, throw this exception
- * @author Mengqiu (Roger) Chen
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
  *
  */
 public class NullInputException extends Exception{
