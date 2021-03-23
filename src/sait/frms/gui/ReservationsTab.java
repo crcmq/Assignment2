@@ -18,8 +18,7 @@ import sait.frms.problemdomain.Reservation;
  * Holds the components for the reservations tab.
  * 
  */
-public class ReservationsTab extends TabBase 
-{
+public class ReservationsTab extends TabBase {
 
 	private ReservationManager reservationManager;
 	private JList<Reservation> reservationsList;
@@ -35,15 +34,15 @@ public class ReservationsTab extends TabBase
 	private JTextField costText;
 	private JTextField nameText;
 	private JTextField citizenshipText;
-	private JComboBox statusBox;
+	private JComboBox<String> statusBox;
 	private Reservation selectedReservation;  // selected reservation from scroll pane
 	
 	
 	/**
 	 * Creates the components for reservations tab.
+	 * @param reservationManager ReservationManager object
 	 */
-	public ReservationsTab(ReservationManager reservationManager) 
-	{
+	public ReservationsTab(ReservationManager reservationManager) {
 		this.reservationManager = reservationManager;
 		panel.setLayout(new BorderLayout());
 		
@@ -64,8 +63,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the north panel.
 	 * @return JPanel that goes in north.
 	 */
-	private JPanel createNorthPanel() 
-	{
+	private JPanel createNorthPanel() {
 		JPanel panel = new JPanel();
 		
 		JLabel title = new JLabel("Reservations", SwingConstants.CENTER);
@@ -79,8 +77,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the center panel
 	 * @return JPanel that goes in center.
 	 */
-	private JPanel createCenterPanel() 
-	{
+	private JPanel createCenterPanel() {
 		JPanel panel = new JPanel();
 		
 		panel.setLayout(new BorderLayout());	
@@ -106,8 +103,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the east panel
 	 * @return JPanel that goes in east
 	 */
-	private JPanel createEastPanel() 
-	{
+	private JPanel createEastPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -142,7 +138,7 @@ public class ReservationsTab extends TabBase
 		
 		String[] activeStatus = {"Active", "Inactive"};
 		JLabel status_textPanelLabel = new JLabel("Status: ");
-		statusBox = new JComboBox(activeStatus);
+		statusBox = new JComboBox<String>(activeStatus);
 		
 		textPanel.add(code_textPanelLabel);
 		textPanel.add(codeText);
@@ -172,8 +168,7 @@ public class ReservationsTab extends TabBase
 	 * Creates the south panel
 	 * @return JPanel that goes in south
 	 */
-	private JPanel createSouthPanel() 
-	{
+	private JPanel createSouthPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
@@ -207,17 +202,17 @@ public class ReservationsTab extends TabBase
 		return panel;
 	}
 	
-	private class MyListSelectionListener implements ListSelectionListener 
-	{
+	private class MyListSelectionListener implements ListSelectionListener {
 		/**
 		 * Called when user selects an item in the JList.
 		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			
+			// get index of selected reservation
 			int idx = reservationsList.getSelectedIndex();
 			if (idx != -1) {
 				selectedReservation = foundReservations.get(idx);
+				// read info
 				String reservationCode = selectedReservation.getCode();
 				String flightCode = selectedReservation.getFlightCode();
 				String airline = selectedReservation.getAirline();
@@ -225,7 +220,7 @@ public class ReservationsTab extends TabBase
 				String clientName = selectedReservation.getName();
 				String citizenship = selectedReservation.getCitizenship();
 				boolean isActive = selectedReservation.isActive();
-				
+				// show info in text fields
 				codeText.setText(reservationCode);
 				flightText.setText(flightCode);
 				airlineText.setText(airline);
@@ -240,8 +235,6 @@ public class ReservationsTab extends TabBase
 					statusBox.setSelectedIndex(1);
 				}
 			}
-
-			
 		}	
 	}
 
@@ -257,17 +250,19 @@ public class ReservationsTab extends TabBase
 			foundReservations = new ArrayList<>();
 			reservationModel.removeAllElements();
 			
+			// read info from user input
 			String reservationCode = code_text.getText();
 			String airline = airline_text.getText();
 			String clientName = name_text.getText();
+			
 			// search and find reservations
 			foundReservations = reservationManager.findReservation(reservationCode, airline, clientName);
-						
+			
+			// display found reservation 
 			for (Reservation r: foundReservations) {
 				if (r.isActive()) {
 					reservationModel.addElement(r);
 				}
-				
 			}			
 		}
 	}
@@ -275,6 +270,8 @@ public class ReservationsTab extends TabBase
 	private class updateListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {
+			
+			// read info from user input
 			String clientName = nameText.getText();
 			String citizenShip = citizenshipText.getText();
 			String code = codeText.getText();
@@ -285,16 +282,15 @@ public class ReservationsTab extends TabBase
 				isActive = true;
 			}
 			
+			// update reservation according to user input
 			try {
 				reservationManager.updateReservation(selectedReservation, clientName, citizenShip, isActive);
 				reservationModel.clear();
 				for(Reservation r : foundReservations) {
 					if (r.isActive()) {
 						reservationModel.addElement(r);
-					}
-					
-				}
-				
+					}		
+				}		
 				JOptionPane.showMessageDialog(null, code + " Has been updated");
 			}
 			catch (NullClientNameException nce) {
