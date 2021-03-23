@@ -2,7 +2,7 @@ package sait.frms.exception;
 
 /**
  * This exception is thrown if client name is empty
- * @author Mengqiu (Roger) Chen
+ * @author Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
  *
  */
 public class NullClientNameException extends Exception {
