@@ -110,18 +110,21 @@ public class ReservationManager {
 	public ArrayList<Reservation> findReservation(String _code, String _airline, String _name) {
 		ArrayList<Reservation> foundReservations = new ArrayList<>();
 		for (Reservation r : reservations) {
-			String code = r.getCode();
-			String airline = r.getAirline();
-			String name = r.getName();
-			boolean matched = false;
-			// the reservation should match all the conditions that are not empty
-			matched = _code.equals("") || _code.equals(code);
-			matched = matched && (_airline.equals("") || _airline.equals(airline));
-			matched = matched && (_name.equals("") || _name.equals(name));
-					
-			if (matched) {
-				foundReservations.add(r);
+				if (r.isActive()) {
+				String code = r.getCode();
+				String airline = r.getAirline();
+				String name = r.getName();
+				boolean matched = false;
+				// the reservation should match all the conditions that are not empty
+				matched = _code.equals("") || _code.equals(code);
+				matched = matched && (_airline.equals("") || _airline.equals(airline));
+				matched = matched && (_name.equals("") || _name.equals(name));
+						
+				if (matched) {
+					foundReservations.add(r);
 			}
+			}
+
 		}
 		return foundReservations;
 	}

@@ -37,7 +37,6 @@ public class ReservationsTab extends TabBase {
 	private JComboBox<String> statusBox;
 	private Reservation selectedReservation;  // selected reservation from scroll pane
 	
-	
 	/**
 	 * Creates the components for reservations tab.
 	 * @param reservationManager ReservationManager object
@@ -251,19 +250,22 @@ public class ReservationsTab extends TabBase {
 			reservationModel.removeAllElements();
 			
 			// read info from user input
-			String reservationCode = code_text.getText();
-			String airline = airline_text.getText();
-			String clientName = name_text.getText();
+			String find_ReservationCode = code_text.getText();
+			String find_Airline = airline_text.getText();
+			String find_ClientName = name_text.getText();
 			
 			// search and find reservations
-			foundReservations = reservationManager.findReservation(reservationCode, airline, clientName);
+			foundReservations = reservationManager.findReservation(find_ReservationCode, find_Airline, find_ClientName);
 			
 			// display found reservation 
 			for (Reservation r: foundReservations) {
 				if (r.isActive()) {
 					reservationModel.addElement(r);
 				}
-			}			
+			}
+			if (reservationModel.size() == 0) {
+				JOptionPane.showMessageDialog(null, "Sorry, there's no matching reservation");
+			}
 		}
 	}
 	
@@ -278,14 +280,14 @@ public class ReservationsTab extends TabBase {
 			int status = statusBox.getSelectedIndex();
 			
 			boolean isActive = false;
-			if (status == 0) {
-				isActive = true;
-			}
-			
+			isActive = status == 0;
+				
 			// update reservation according to user input
 			try {
 				reservationManager.updateReservation(selectedReservation, clientName, citizenShip, isActive);
 				reservationModel.clear();
+				// updated reservation should be displayed 
+				foundReservations = reservationManager.findReservation(code, "", "");
 				for(Reservation r : foundReservations) {
 					if (r.isActive()) {
 						reservationModel.addElement(r);
