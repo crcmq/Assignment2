@@ -19,10 +19,11 @@ The user can also find and update his/her reservations under Reservations tab.
 The user can search reservations by entering any field of Code (Reservation code), Airline name, and client name. 
 Once reservations are found, they will be displayed in the blank area. 
 Only one reservation can be selected at a time.
-The user can update his/her reseration by modifying name and citizenship.
+The user can update his/her reservation by modifying name and citizenship.
+Once the user updated his/her reservation, only the reservations with the same reservation code will be displayed on screen
 The user can also set the status of reservation. 
 !!!!!ONCE RESERVATION IS SET INACTIVE, THE RESERVATION CANNOT BE SEEN ANY MORE.!!!!!
 
 !!!!!INACTIVE RESERVATIONS CANNOT BE SEEN BY CLIENT, BUT THEY ARE STILL IN BINARY FILE.!!!!!
 
-*******The program can be run by using java -jar .\Assignment2.jar within CMD or PowerShell.********
+*******The program can be run by double clicking Assignment2.jar********
