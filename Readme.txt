@@ -1,6 +1,6 @@
 Assignment 2
 -----------------------------------------------------------------------------------------------------
-Author: Mengqiu (Roger) Chen, Ebele Egenti, AJ Russell De Leon, Dmitriy Fominykh
+Author: Mengqiu (Roger) Chen
 
 Complete Date: 2021-3-22
 
